@@ -12,7 +12,7 @@ data class Note(
     val content: String,
     val color: Int,
     val addTime: Long? = null,
-    val notificationTime: Long? = null
+    var notificationTime: Long? = null
 ) : Parcelable {
 
     companion object {

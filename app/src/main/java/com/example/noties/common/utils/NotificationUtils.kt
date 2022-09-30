@@ -2,11 +2,17 @@ package com.example.noties.common.utils
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.app.TaskStackBuilder
+import androidx.core.net.toUri
+import com.example.noties.MainActivity
 import com.example.noties.R
+import com.example.noties.common.navigation.Screen
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -31,17 +37,34 @@ class NotificationUtils @Inject constructor(
         }
     }
 
-    fun crateInitialSync() {
+    fun crateInitialSync(title: String?, noteId: Long) {
         notificationManager.notify(
             NOTIFICATION_ID,
             NotificationCompat.Builder(context, CHANNEL_ID)
                 .setContentTitle("Notification")
+                .setContentText(title)
                 .setSmallIcon(R.drawable.ic_alarm)
                 .setAutoCancel(true)
                 .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setCategory(NotificationCompat.CATEGORY_SERVICE)
+                .setContentIntent(openNote(noteId))
                 .build()
         )
+    }
+
+    private fun openNote(noteId: Long): PendingIntent? {
+        val intent = Intent(
+            Intent.ACTION_VIEW,
+            "$MY_URI/$MY_ARG=$noteId".toUri(),
+            context, MainActivity::class.java
+        ).apply {
+            putExtra(ROUTE, Screen.EditScreen.route)
+        }
+        val pendingIntent = TaskStackBuilder.create(context).run {
+            addNextIntentWithParentStack(intent)
+            getPendingIntent(1, PendingIntent.FLAG_UPDATE_CURRENT)
+        }
+        return pendingIntent
     }
 
     private fun supportNotificationChannels(): Boolean {

@@ -9,9 +9,14 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Send
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
@@ -28,37 +33,29 @@ import kotlinx.coroutines.launch
 @Composable
 fun EditNoteScreen(
     navController: NavHostController,
-    note: Note? = null,
+    noteId: Long? = null,
     viewModel: EditNoteViewModel = hiltViewModel()
 ) {
-    if (note != null) {
-        viewModel.setEvent(EditNoteEvent.LoadNote(note))
+    LaunchedEffect(key1 = noteId) {
+        if (noteId != null) {
+            viewModel.setEvent(EditNoteEvent.LoadNote(noteId))
+        }
     }
     val context = LocalContext.current
-    val state = viewModel._state.value
+    val state = viewModel.state.value
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
-
-    var title by remember {
-        mutableStateOf(state.note?.title ?: "")
-    }
-
-    var content by remember {
-        mutableStateOf(state.note?.content ?: "")
-    }
-
     var colorAnimatable = remember {
-        Animatable(Color(note?.color ?: Note.listColors.random().toArgb()))
+        Animatable(Color(state.color))
     }
 
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
             EditTopBar(onTimePickClick = {
-                TimePicker(context, onTimePick = { calendar ->
-
-                    DatePicker(context, calendar, onDataPick = { calendar ->
-                        viewModel.setEvent(EditNoteEvent.TimePick(calendar.timeInMillis))
+                TimePicker(context, onTimePick = { calendarTime ->
+                    DatePicker(context, calendarTime, onDataPick = { calendarData ->
+                        viewModel.setEvent(EditNoteEvent.TimePick(calendarData.timeInMillis))
                     })
                 })
             })
@@ -67,21 +64,14 @@ fun EditNoteScreen(
             FloatingActionButton(
                 onClick = {
                     viewModel.setEvent(
-                        EditNoteEvent.SaveNote(
-                            note = Note(
-                                id = note?.id,
-                                title = title,
-                                content = content,
-                                color = colorAnimatable.value.toArgb()
-                            )
-                        )
+                        EditNoteEvent.SaveNote
                     )
                     navController.navigateUp()
                 },
                 backgroundColor = MaterialTheme.colors.primary
             ) {
                 Icon(
-                    imageVector = if (note == null) {
+                    imageVector = if (noteId == null) {
                         Icons.Default.Send
                     } else {
                         Icons.Default.Edit
@@ -124,6 +114,7 @@ fun EditNoteScreen(
                                         targetValue = Color(colorInt),
                                         animationSpec = tween(durationMillis = 500)
                                     )
+                                    viewModel.setEvent(EditNoteEvent.AddColor(colorAnimatable.value.toArgb()))
                                 }
                             }
                     ) {
@@ -133,30 +124,47 @@ fun EditNoteScreen(
             }
             Spacer(modifier = Modifier.height(16.dp))
             state.notificationTime?.let {
-                Text(text = it.toDate())
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Start,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    IconButton(onClick = { viewModel.setEvent(EditNoteEvent.DeleteTimer) }) {
+                        Icon(imageVector = Icons.Default.Delete, contentDescription = "delete timer")
+                    }
+                    Spacer(modifier = Modifier.width(10.dp))
+                    Text(text = it.toDate())
+                }
+
                 Spacer(modifier = Modifier.height(16.dp))
             }
             TransparentHintTextField(
-                text = title,
+                text = state.title,
                 hint = "Title here...",
                 onValueChange = {
-                    title = it
+                    viewModel.setEvent(EditNoteEvent.AddTitle(it))
                 },
-                isHintVisible = title.isEmpty(),
+                isHintVisible = state.title.isEmpty(),
                 singleLine = true,
-                textStyle = MaterialTheme.typography.h5
+                textStyle = MaterialTheme.typography.h5,
+                onFocusChange = {
+
+                }
             )
             Spacer(modifier = Modifier.height(16.dp))
 
             TransparentHintTextField(
-                text = content,
+                text = state.content,
                 hint = "Content here...",
                 onValueChange = {
-                    content = it
+                    viewModel.setEvent(EditNoteEvent.AddContent(it))
                 },
-                isHintVisible = content.isEmpty(),
+                isHintVisible = state.content.isEmpty(),
                 textStyle = MaterialTheme.typography.body1,
-                modifier = Modifier.fillMaxHeight()
+                modifier = Modifier.fillMaxHeight(),
+                onFocusChange = {
+
+                }
             )
         }
     }

@@ -5,6 +5,7 @@ import com.example.noties.common.base.BaseViewModel
 import com.example.noties.feature.domain.model.Note
 import com.example.noties.feature.domain.use_case.NoteUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -16,12 +17,14 @@ class NotesViewModel @Inject constructor(
 ) : BaseViewModel<NotesEvent, NotesState, NotesAction>() {
 
     init {
+        _state.value = _state.value.copy(isLoading = true)
         getNotes()
     }
 
     private fun getNotes() {
         noteUseCase.getNotesUseCase().onEach { notes ->
-            _state.value = _state.value.copy(notes = notes)
+            delay(2000L)
+            _state.value = _state.value.copy(notes = notes, isLoading = false)
         }.launchIn(viewModelScope)
     }
 

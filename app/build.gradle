@@ -22,6 +22,12 @@ android {
         }
     }
 
+    kapt {
+        arguments {
+            arg("room.schemaLocation", "$projectDir/schemas")
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -137,5 +143,6 @@ dependencies {
     implementation "com.google.android.exoplayer:exoplayer:$exoplayer_version"
 
 //accompanist
+    implementation "com.google.accompanist:accompanist-placeholder:0.25.0"
 
 }

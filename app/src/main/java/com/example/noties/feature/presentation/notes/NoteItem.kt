@@ -15,12 +15,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.noties.common.extension.toDate
 import com.example.noties.feature.domain.model.Note
+import com.example.noties.ui.theme.DarkGreen
 import com.example.noties.ui.theme.fontSize
+import com.google.accompanist.placeholder.PlaceholderHighlight
+import com.google.accompanist.placeholder.placeholder
+import com.google.accompanist.placeholder.shimmer
 
 @Composable
 fun NoteItem(
     modifier: Modifier = Modifier,
     note: Note,
+    isLoading: Boolean,
     onDeleteClick: () -> Unit
 ) {
     Card(
@@ -36,35 +41,58 @@ fun NoteItem(
                 .padding(16.dp),
         ) {
             Text(
+                modifier = modifier
+                    .placeholder(
+                        visible = isLoading,
+                        color = Color.Gray.copy(alpha = 0.4f),
+                        shape = RoundedCornerShape(8.dp),
+                        highlight = PlaceholderHighlight.shimmer(highlightColor = Color.White),
+                    ),
                 text = note.title,
                 fontSize = MaterialTheme.fontSize.large,
                 textAlign = TextAlign.Start
             )
             Spacer(modifier = Modifier.height(5.dp))
             Text(
+                modifier = modifier
+                    .placeholder(
+                        visible = isLoading,
+                        color = Color.Gray.copy(alpha = 0.4f),
+                        shape = RoundedCornerShape(8.dp),
+                        highlight = PlaceholderHighlight.shimmer(highlightColor = Color.White),
+                    ),
                 text = note.content,
                 fontSize = MaterialTheme.fontSize.medium,
                 textAlign = TextAlign.Start
             )
+            Spacer(modifier = Modifier.height(5.dp))
             Row(
-                modifier = Modifier
+                modifier = modifier
                     .fillMaxWidth()
-                    .align(Alignment.CenterHorizontally),
+                    .placeholder(
+                        visible = isLoading,
+                        color = Color.Gray.copy(alpha = 0.4f),
+                        shape = RoundedCornerShape(8.dp),
+                        highlight = PlaceholderHighlight.shimmer(highlightColor = Color.White),
+                    ),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                TextButton(
-                    onClick = { }) {
+                TextButton(onClick = { }) {
                     Icon(imageVector = Icons.Default.Notifications, contentDescription = "note icon")
-                    Text(text = note.notificationTime?.toDate() ?: "")
+                    Text(
+                        text = note.notificationTime?.toDate() ?: "",
+                        color = if ((note.notificationTime ?: 0) > System.currentTimeMillis()) {
+                            DarkGreen
+                        } else {
+                            Color.Red
+                        }
+                    )
                 }
                 IconButton(
                     onClick = { onDeleteClick() }) {
                     Icon(imageVector = Icons.Default.Delete, contentDescription = "delete icon")
                 }
-
             }
-
         }
-
     }
 }

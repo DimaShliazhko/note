@@ -37,10 +37,10 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideNotesUseCase(noteRepository: NoteRepository): NoteUseCase {
+    fun provideNotesUseCase(noteRepository: NoteRepository, alarmUtil: AlarmUtils): NoteUseCase {
         return NoteUseCase(
             getNotesUseCase = GetNotesUseCase(noteRepository),
-            deleteNotesUseCase = DeleteNotesUseCase(noteRepository),
+            deleteNotesUseCase = DeleteNotesUseCase(noteRepository, alarmUtil),
             getNoteByIdUseCase = GetNoteByIdUseCase(noteRepository),
             insertNotesUseCase = InsertNotesUseCase(noteRepository),
             editNotesUseCase = EditNotesUseCase(noteRepository)
@@ -50,7 +50,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideAlarmUtils(context :Context): AlarmUtils {
+    fun provideAlarmUtils(context: Context): AlarmUtils {
         return AlarmUtils(context)
     }
 

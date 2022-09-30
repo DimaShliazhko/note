@@ -13,9 +13,19 @@ class AlarmUtils @Inject constructor(
 
     private val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-    fun createAlarm(time: Long) {
+    fun createAlarm(time: Long, title: String, id: Long) {
+        val intent = Intent(context, AlarmReceiver::class.java).apply {
+            putExtra(NOTE_TITLE, title)
+            putExtra(NOTE_ID, id)
+            action = ACTION
+        }
+        val pendingIntent = PendingIntent.getBroadcast(context, id.toInt(), intent, 0)
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, time, pendingIntent)
+    }
+
+    fun cancelAlarm( id: Long) {
         val intent = Intent(context, AlarmReceiver::class.java)
-        val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0)
-        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, time, AlarmManager.INTERVAL_DAY, pendingIntent)
+        val pendingIntent = PendingIntent.getBroadcast(context, id.toInt(), intent, 0)
+        alarmManager.cancel(pendingIntent)
     }
 }

@@ -1,5 +1,6 @@
 package com.example.noties
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -14,6 +15,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.example.noties.common.navigation.Navigation
 import com.example.noties.common.navigation.Screen
+import com.example.noties.common.utils.ROUTE
 import com.example.noties.ui.theme.NotiesTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -23,7 +25,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             NotiesTheme {
-                // A surface container using the 'background' color from the theme
                 val navController = rememberNavController()
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background) {
                     Navigation(navController)
@@ -33,15 +34,3 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    NotiesTheme {
-        Greeting("Android")
-    }
-}

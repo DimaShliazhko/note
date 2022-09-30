@@ -15,14 +15,18 @@ class EditNoteViewModel @Inject constructor(
     private val alarmUtil: AlarmUtils,
 ) : BaseViewModel<EditNoteEvent, EditNoteState, EditNoteAction>() {
 
-    init {
-        // getNoteById()
-    }
+    init {}
 
-    private fun getNoteById(note: Note) {
+    private fun getNoteById(noteId: Long) {
         viewModelScope.launch {
-            _state.value = _state.value.copy(note = note)
-            _state.value = _state.value.copy(notificationTime = note.notificationTime)
+            val note = noteUseCase.getNoteByIdUseCase(noteId)
+            _state.value = _state.value.copy(
+                content = note.content,
+                id = note.id,
+                title = note.title,
+                notificationTime = note.notificationTime,
+                color = note.color,
+            )
         }
     }
 
@@ -31,35 +35,48 @@ class EditNoteViewModel @Inject constructor(
     override fun handleEvent(event: EditNoteEvent) {
         when (event) {
             is EditNoteEvent.LoadNote -> {
-                getNoteById(event.note)
-            }
-            is EditNoteEvent.DeleteNote -> {
-                viewModelScope.launch {
-                    noteUseCase.deleteNotesUseCase(note = event.note)
-                }
+                getNoteById(event.noteId)
             }
             is EditNoteEvent.TimePick -> {
-                _state.value = state.value.copy(notificationTime = event.time)
+                _state.value = _state.value.copy(notificationTime = event.time)
+            }
+            is EditNoteEvent.AddTitle -> {
+                _state.value = _state.value.copy(title = event.title)
+            }
+            is EditNoteEvent.AddContent -> {
+                _state.value = _state.value.copy(content = event.content)
+            }
+            is EditNoteEvent.AddColor -> {
+                _state.value = _state.value.copy(color = event.color)
+            }
+            is EditNoteEvent.DeleteTimer -> {
+                _state.value = _state.value.copy(notificationTime = null)
             }
             is EditNoteEvent.SaveNote -> {
 
-                event.note.id?.let {
+                val note = Note(
+                    id = _state.value.id,
+                    title = _state.value.title,
+                    content = _state.value.content,
+                    notificationTime = _state.value.notificationTime,
+                    color = _state.value.color,
+                )
+                _state.value.id?.let {
                     viewModelScope.launch {
-                        noteUseCase.editNotesUseCase(event.note.copy(notificationTime = state.value.notificationTime))
+                        noteUseCase.editNotesUseCase(note = note)
                     }
                 } ?: run {
                     viewModelScope.launch {
-                        noteUseCase.insertNotesUseCase(event.note.copy(notificationTime = state.value.notificationTime))
+                        noteUseCase.insertNotesUseCase(note)
                     }
                 }
 
-                state.value.notificationTime?.let { setAlarm(it) }
+                _state.value.notificationTime?.let { setAlarm(it,_state.value) }
             }
         }
-
     }
 
-    private fun setAlarm(notificationTime: Long) {
-        alarmUtil.createAlarm(notificationTime)
+    private fun setAlarm(notificationTime: Long, note: EditNoteState) {
+        alarmUtil.createAlarm(notificationTime,note.title, note.id!!)
     }
 }

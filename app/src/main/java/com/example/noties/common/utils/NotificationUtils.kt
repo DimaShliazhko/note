@@ -39,7 +39,7 @@ class NotificationUtils @Inject constructor(
 
     fun crateInitialSync(title: String?, noteId: Long) {
         notificationManager.notify(
-            NOTIFICATION_ID,
+            noteId.toInt(),
             NotificationCompat.Builder(context, CHANNEL_ID)
                 .setContentTitle("Notification")
                 .setContentText(title)

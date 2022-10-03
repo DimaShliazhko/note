@@ -5,6 +5,7 @@ import com.example.noties.feature.domain.model.Note
 
 data class NotesState(
     val isLoading: Boolean = false,
-    val notes: List<Note> = emptyList()
+    val notes: List<Note> = emptyList(),
+    val searchText: String = ""
 ) : State {
 }

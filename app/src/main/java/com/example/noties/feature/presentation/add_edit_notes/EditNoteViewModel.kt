@@ -71,12 +71,16 @@ class EditNoteViewModel @Inject constructor(
                     }
                 }
 
-                _state.value.notificationTime?.let { setAlarm(it,_state.value) }
+                if (_state.value.notificationTime != null) {
+                    if (_state.value.notificationTime!! >= System.currentTimeMillis()) {
+                        setAlarm(_state.value.notificationTime!!, _state.value)
+                    }
+                }
             }
         }
     }
 
     private fun setAlarm(notificationTime: Long, note: EditNoteState) {
-        alarmUtil.createAlarm(notificationTime,note.title, note.id!!)
+        alarmUtil.createAlarm(notificationTime, note.title, note.id!!)
     }
 }

@@ -39,6 +39,9 @@ class NotesViewModel @Inject constructor(
                     lastDeleteNote = event.note
                 }
             }
+            is NotesEvent.Search -> {
+                _state.value = _state.value.copy(searchText = event.title)
+            }
             is NotesEvent.RestoreNote -> {
                 viewModelScope.launch {
                     noteUseCase.insertNotesUseCase(lastDeleteNote ?: return@launch)

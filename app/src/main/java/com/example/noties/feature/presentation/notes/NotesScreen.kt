@@ -11,25 +11,22 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.graphics.vector.rememberVectorPainter
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.noties.common.base.Event
 import com.example.noties.common.navigation.Screen
 import com.example.noties.common.utils.NOTE_ID
 import com.example.noties.feature.domain.model.Note
 import com.example.noties.ui.theme.Purple500
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun NotesScreen(
     navController: NavController,
@@ -40,6 +37,14 @@ fun NotesScreen(
     val scope = rememberCoroutineScope()
 
     Scaffold(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = Purple500),
+        topBar = {
+            TopBar(onTextChange = {
+                viewModel.setEvent(NotesEvent.Search(it))
+            })
+        },
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
@@ -77,35 +82,39 @@ fun NotesScreen(
                     }
                 }
                 items(state.notes) { note ->
-                    NoteItem(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable {
-                                navController.currentBackStackEntry?.savedStateHandle?.set(NOTE_ID, note.id)
-                                navController.navigate(Screen.EditScreen.passNoteId(note.id!!))
-                            },
-                        note = note,
-                        isLoading = state.isLoading,
-                        onDeleteClick = {
-                            viewModel.setEvent(NotesEvent.DeleteNote(note))
-                            scope.launch {
-                                val result = scaffoldState.snackbarHostState.showSnackbar(
-                                    message = "Note Delete",
-                                    actionLabel = "Cancel"
-                                )
-                                if (result == SnackbarResult.ActionPerformed) {
-                                    viewModel.setEvent(NotesEvent.RestoreNote)
+                    if (state.searchText.let { it1 -> note.title.contains(it1) }) {
+                        NoteItem(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    navController.currentBackStackEntry?.savedStateHandle?.set(NOTE_ID, note.id)
+                                    navController.navigate(Screen.EditScreen.passNoteId(note.id!!))
+                                },
+                            note = note,
+                            isLoading = state.isLoading,
+                            onDeleteClick = {
+                                viewModel.setEvent(NotesEvent.DeleteNote(note))
+                                scope.launch {
+                                    val result = scaffoldState.snackbarHostState.showSnackbar(
+                                        message = "Note Delete",
+                                        actionLabel = "Cancel"
+                                    )
+                                    if (result == SnackbarResult.ActionPerformed) {
+                                        viewModel.setEvent(NotesEvent.RestoreNote)
+                                    }
                                 }
                             }
-                        }
-                    )
+                        )
+                    }
                 }
             }
 
             if (state.isLoading) {
-                CircularProgressIndicator(modifier = Modifier
-                    .size(50.dp)
-                    .align(Alignment.Center), color = Color.Red)
+                CircularProgressIndicator(
+                    modifier = Modifier
+                        .size(50.dp)
+                        .align(Alignment.Center), color = Color.Red
+                )
             }
         }
     }

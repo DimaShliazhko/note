@@ -49,7 +49,8 @@ object AppModule {
             deleteNotesUseCase = DeleteNotesUseCase(noteRepository, alarmUtil),
             getNoteByIdUseCase = GetNoteByIdUseCase(noteRepository),
             insertNotesUseCase = InsertNotesUseCase(noteRepository),
-            editNotesUseCase = EditNotesUseCase(noteRepository)
+            editNotesUseCase = EditNotesUseCase(noteRepository),
+            deleteAllNotesUseCase = DeleteAllNotesUseCase(noteRepository,alarmUtil)
         )
     }
 

@@ -1,6 +1,5 @@
 package com.example.noties.feature.presentation.notes
 
-import androidx.compose.animation.*
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -8,6 +7,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -24,10 +24,12 @@ import com.example.noties.ui.theme.Purple500
 fun TopBar(
     modifier: Modifier = Modifier,
     onTextChange: (String) -> Unit,
-    onSortClick: (Boolean) -> Unit
+    onSortClick: (Boolean) -> Unit,
+    navigationIconClick: (Boolean) -> Unit
 ) {
     var onSearchClick by remember { mutableStateOf(false) }
     var onSort by remember { mutableStateOf(false) }
+    var isMainMenuOpen by remember { mutableStateOf(false) }
 
     TopAppBar(
         modifier = modifier.fillMaxWidth(),
@@ -45,6 +47,14 @@ fun TopBar(
                     onSearchClicked = { setings -> })
             } else {
                 Text(text = stringResource(id = R.string.all_noties))
+            }
+        },
+        navigationIcon = {
+            IconButton(onClick = {
+                isMainMenuOpen = !isMainMenuOpen
+                navigationIconClick(isMainMenuOpen)
+            }) {
+                Icon(imageVector = Icons.Default.Menu, contentDescription = "main menu")
             }
         },
         actions = {
@@ -74,7 +84,6 @@ fun TopBar(
             }
         })
 }
-
 
 @Composable
 fun SearchAppBar(

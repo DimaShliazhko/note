@@ -52,6 +52,19 @@ class EditNoteViewModel @Inject constructor(
             is EditNoteEvent.DeleteTimer -> {
                 _state.value = _state.value.copy(notificationTime = null)
             }
+            is EditNoteEvent.DeleteNote -> {
+                viewModelScope.launch {
+                    val note = Note(
+                        id = _state.value.id,
+                        title = _state.value.title,
+                        content = _state.value.content,
+                        notificationTime = _state.value.notificationTime,
+                        color = _state.value.color,
+                        addTime = System.currentTimeMillis()
+                    )
+                    noteUseCase.deleteNotesUseCase(note = note)
+                }
+            }
             is EditNoteEvent.SaveNote -> {
                 val note = Note(
                     id = _state.value.id,

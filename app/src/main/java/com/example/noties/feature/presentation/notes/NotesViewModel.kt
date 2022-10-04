@@ -19,7 +19,6 @@ class NotesViewModel @Inject constructor(
 ) : BaseViewModel<NotesEvent, NotesState, NotesAction>() {
 
     init {
-
         getNotes()
     }
 
@@ -40,7 +39,7 @@ class NotesViewModel @Inject constructor(
                 val temp = if (_state.value.sortType.sortByTitle) {
                     notes.sortedBy { it.title.lowercase() }
                 } else {
-                    notes.sortedBy { it.addTime }
+                    notes.sortedBy { it.addTime }.reversed()
                 }
                 _state.value = _state.value.copy(notes = temp, isLoading = false)
             }.launchIn(viewModelScope)
@@ -61,6 +60,11 @@ class NotesViewModel @Inject constructor(
             }
             is NotesEvent.Search -> {
                 _state.value = _state.value.copy(searchText = event.title)
+            }
+            is NotesEvent.DeleteAllNote -> {
+                viewModelScope.launch {
+                    noteUseCase.deleteAllNotesUseCase()
+                }
             }
             is NotesEvent.RestoreNote -> {
                 viewModelScope.launch {

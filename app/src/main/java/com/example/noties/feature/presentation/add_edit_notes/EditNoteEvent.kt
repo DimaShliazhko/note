@@ -10,5 +10,6 @@ sealed class EditNoteEvent : Event {
     data class AddContent(val content: String) : EditNoteEvent()
     data class AddColor(val color: Int) : EditNoteEvent()
     object DeleteTimer : EditNoteEvent()
+    object DeleteNote : EditNoteEvent()
     object SaveNote : EditNoteEvent()
 }

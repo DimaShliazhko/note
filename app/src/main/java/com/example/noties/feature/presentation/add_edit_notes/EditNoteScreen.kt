@@ -23,10 +23,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.example.noties.R
 import com.example.noties.common.extension.toDate
 import com.example.noties.feature.domain.model.Note
 import kotlinx.coroutines.launch
@@ -54,13 +58,23 @@ fun EditNoteScreen(
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
-            EditTopBar(onTimePickClick = {
-                TimePicker(context, onTimePick = { calendarTime ->
-                    DatePicker(context, calendarTime, onDataPick = { calendarData ->
-                        viewModel.setEvent(EditNoteEvent.TimePick(calendarData.timeInMillis))
-                    })
-                })
-            })
+            EditTopBar(
+                onTimePickClick = {
+                    TimePicker(
+                        context,
+                        onTimePick = { calendarTime ->
+                            DatePicker(context, calendarTime, onDataPick = { calendarData ->
+                                viewModel.setEvent(EditNoteEvent.TimePick(calendarData.timeInMillis))
+                            })
+                        }
+                    )
+                },
+                onDeleteClick = {
+                    viewModel.setEvent(EditNoteEvent.DeleteNote)
+                    navController.navigateUp()
+                }
+
+            )
         },
         floatingActionButton = {
             FloatingActionButton(
@@ -130,11 +144,12 @@ fun EditNoteScreen(
                     horizontalArrangement = Arrangement.Start,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
+                    Icon(imageVector =  ImageVector.vectorResource(R.drawable.ic_time), contentDescription ="timer")
+                    Spacer(modifier = Modifier.width(10.dp))
+                    Text(text = it.toDate())
                     IconButton(onClick = { viewModel.setEvent(EditNoteEvent.DeleteTimer) }) {
                         Icon(imageVector = Icons.Default.Delete, contentDescription = "delete timer")
                     }
-                    Spacer(modifier = Modifier.width(10.dp))
-                    Text(text = it.toDate())
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))

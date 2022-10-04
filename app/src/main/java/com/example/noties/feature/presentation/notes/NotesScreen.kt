@@ -26,6 +26,7 @@ import androidx.navigation.NavController
 import com.example.noties.common.navigation.Screen
 import com.example.noties.common.utils.NOTE_ID
 import com.example.noties.feature.domain.model.Note
+import com.example.noties.feature.presentation.notes.drawer.DrawerMenu
 import com.example.noties.ui.theme.Purple500
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -64,11 +65,20 @@ fun NotesScreen(
             },
                 onSortClick = {
                     isSortOpen = it
+                },
+                navigationIconClick = {
+                    scope.launch {
+                        scaffoldState.drawerState.open()
+                    }
                 })
+        },
+        drawerContent = {
+            DrawerMenu(allDeleteClick = { viewModel.setEvent(NotesEvent.DeleteAllNote) })
         },
         floatingActionButton = {
             if (!listState.isScrollInProgress) {
                 FloatingActionButton(
+                    modifier = Modifier.padding(vertical = 20.dp),
                     onClick = {
                         navController.navigate(Screen.AddNotesScreen.route)
                     },

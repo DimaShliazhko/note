@@ -68,7 +68,7 @@ fun NoteItem(
                 textAlign = TextAlign.Start
             )
             Spacer(modifier = Modifier.height(5.dp))
-            Row(
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .placeholder(
@@ -77,20 +77,23 @@ fun NoteItem(
                         shape = RoundedCornerShape(8.dp),
                         highlight = PlaceholderHighlight.shimmer(highlightColor = Color.White),
                     ),
-                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                TextButton(onClick = { }) {
-                    Icon(imageVector = Icons.Default.Notifications, contentDescription = "note icon")
-                    Text(
-                        text = note.notificationTime?.toDate() ?: "",
-                        color = if ((note.notificationTime ?: 0) > System.currentTimeMillis()) {
-                            DarkGreen
-                        } else {
-                            Color.Red
-                        }
-                    )
+                if (note.notificationTime != null) {
+                    TextButton(onClick = { }) {
+                        Icon(imageVector = Icons.Default.Notifications, contentDescription = "note icon")
+                        Text(
+                            text = note.notificationTime?.toDate() ?: "",
+                            color = if ((note.notificationTime ?: 0) > System.currentTimeMillis()) {
+                                DarkGreen
+                            } else {
+                                Color.Red
+                            }
+                        )
+                    }
                 }
+
                 IconButton(
+                    modifier = Modifier.align(Alignment.BottomEnd),
                     onClick = { onDeleteClick() }) {
                     Icon(imageVector = Icons.Default.Delete, contentDescription = "delete icon")
                 }

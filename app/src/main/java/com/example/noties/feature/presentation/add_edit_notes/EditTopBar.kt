@@ -6,6 +6,7 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -15,7 +16,8 @@ import com.example.noties.ui.theme.Purple500
 
 @Composable
 fun EditTopBar(
-    onTimePickClick: () -> Unit
+    onTimePickClick: () -> Unit,
+    onDeleteClick: () -> Unit
 ) {
 
     TopAppBar(
@@ -28,6 +30,12 @@ fun EditTopBar(
             IconButton(
                 onClick = { onTimePickClick() }) {
                 Icon(imageVector = Icons.Default.Notifications, contentDescription = "")
+            }
+
+
+            IconButton(
+                onClick = { onDeleteClick() }) {
+                Icon(imageVector = Icons.Default.Delete, contentDescription = "")
             }
         }
     )

@@ -24,6 +24,10 @@ class NoteRepositoryImpl(
         noteDao.deleteNote(note)
     }
 
+    override suspend fun deleteAllNotes(id :List<Long>) {
+        noteDao.deleteAllNote(id)
+    }
+
     override suspend fun editNotes(note: NoteEntity) {
         noteDao.updateNote(note)
     }

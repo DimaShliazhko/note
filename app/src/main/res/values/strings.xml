@@ -5,4 +5,5 @@
     <string name="sort">Sort</string>
     <string name="title">Title</string>
     <string name="date">Date</string>
+    <string name="delete_all_note">delete all note</string>
 </resources>

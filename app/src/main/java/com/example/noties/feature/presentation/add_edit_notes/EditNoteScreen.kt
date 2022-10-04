@@ -1,5 +1,6 @@
 package com.example.noties.feature.presentation.add_edit_notes
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -30,6 +31,7 @@ import com.example.noties.common.extension.toDate
 import com.example.noties.feature.domain.model.Note
 import kotlinx.coroutines.launch
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun EditNoteScreen(
     navController: NavHostController,
@@ -118,7 +120,6 @@ fun EditNoteScreen(
                                 }
                             }
                     ) {
-
                     }
                 }
             }
@@ -148,7 +149,6 @@ fun EditNoteScreen(
                 singleLine = true,
                 textStyle = MaterialTheme.typography.h5,
                 onFocusChange = {
-
                 }
             )
             Spacer(modifier = Modifier.height(16.dp))
@@ -163,7 +163,6 @@ fun EditNoteScreen(
                 textStyle = MaterialTheme.typography.body1,
                 modifier = Modifier.fillMaxHeight(),
                 onFocusChange = {
-
                 }
             )
         }

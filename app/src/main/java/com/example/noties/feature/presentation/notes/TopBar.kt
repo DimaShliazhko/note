@@ -1,5 +1,6 @@
 package com.example.noties.feature.presentation.notes
 
+import androidx.compose.animation.*
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -21,9 +22,12 @@ import com.example.noties.ui.theme.Purple500
 
 @Composable
 fun TopBar(
-    modifier: Modifier = Modifier, onTextChange: (String) -> Unit
+    modifier: Modifier = Modifier,
+    onTextChange: (String) -> Unit,
+    onSortClick: (Boolean) -> Unit
 ) {
     var onSearchClick by remember { mutableStateOf(false) }
+    var onSort by remember { mutableStateOf(false) }
 
     TopAppBar(
         modifier = modifier.fillMaxWidth(),
@@ -55,6 +59,19 @@ fun TopBar(
                     )
                 }
             }
+            IconButton(onClick = {
+                onSort = !onSort
+                onSortClick(onSort)
+
+            }) {
+                Icon(
+                    painter = painterResource(MenuAction.Sort.icon),
+                    contentDescription = stringResource(
+                        id = MenuAction.Search
+                            .title
+                    )
+                )
+            }
         })
 }
 
@@ -65,7 +82,6 @@ fun SearchAppBar(
     onCloseClicked: () -> Unit,
     onSearchClicked: (String) -> Unit,
 ) {
-
     var text by remember { mutableStateOf("") }
 
     TextField(

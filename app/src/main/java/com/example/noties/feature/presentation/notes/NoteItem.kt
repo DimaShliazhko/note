@@ -41,7 +41,8 @@ fun NoteItem(
                 .padding(16.dp),
         ) {
             Text(
-                modifier = modifier
+                modifier = Modifier
+                    .fillMaxWidth()
                     .placeholder(
                         visible = isLoading,
                         color = Color.Gray.copy(alpha = 0.4f),
@@ -54,7 +55,8 @@ fun NoteItem(
             )
             Spacer(modifier = Modifier.height(5.dp))
             Text(
-                modifier = modifier
+                modifier = Modifier
+                    .fillMaxWidth()
                     .placeholder(
                         visible = isLoading,
                         color = Color.Gray.copy(alpha = 0.4f),
@@ -67,7 +69,7 @@ fun NoteItem(
             )
             Spacer(modifier = Modifier.height(5.dp))
             Row(
-                modifier = modifier
+                modifier = Modifier
                     .fillMaxWidth()
                     .placeholder(
                         visible = isLoading,

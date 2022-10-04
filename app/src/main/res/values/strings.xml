@@ -2,4 +2,7 @@
     <string name="app_name">noties</string>
     <string name="search">Search</string>
     <string name="all_noties">All note</string>
+    <string name="sort">Sort</string>
+    <string name="title">Title</string>
+    <string name="date">Date</string>
 </resources>

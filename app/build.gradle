@@ -71,6 +71,7 @@ dependencies {
 
 
     def nav_version = "2.5.1"
+    def accompanist = "0.25.0"
     def google_maps = "18.0.1"
     def exoplayer_version = "2.18.0"
 
@@ -143,6 +144,10 @@ dependencies {
     implementation "com.google.android.exoplayer:exoplayer:$exoplayer_version"
 
 //accompanist
-    implementation "com.google.accompanist:accompanist-placeholder:0.25.0"
+    implementation "com.google.accompanist:accompanist-placeholder:$accompanist"
+    implementation "com.google.accompanist:accompanist-navigation-animation:$accompanist"
+
+    //datastore
+    implementation "androidx.datastore:datastore-preferences:1.0.0"
 
 }

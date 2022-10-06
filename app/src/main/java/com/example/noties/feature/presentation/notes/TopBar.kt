@@ -11,6 +11,7 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -29,6 +30,8 @@ fun TopBar(
 ) {
     var onSearchClick by remember { mutableStateOf(false) }
     var onSort by remember { mutableStateOf(false) }
+
+    val degrees = if (onSort) 180f else 0f
     var isMainMenuOpen by remember { mutableStateOf(false) }
 
     TopAppBar(
@@ -75,6 +78,7 @@ fun TopBar(
 
             }) {
                 Icon(
+                    modifier = Modifier.rotate(degrees),
                     painter = painterResource(MenuAction.Sort.icon),
                     contentDescription = stringResource(
                         id = MenuAction.Search

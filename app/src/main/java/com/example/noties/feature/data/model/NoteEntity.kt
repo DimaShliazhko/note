@@ -12,6 +12,8 @@ data class NoteEntity(
     val title: String,
     @ColumnInfo(name = "content")
     val content: String,
+    @ColumnInfo(name = "uri")
+    val uri: String,
     @ColumnInfo(name = "add_time")
     val addTime: Long?,
     @ColumnInfo(name = "color")

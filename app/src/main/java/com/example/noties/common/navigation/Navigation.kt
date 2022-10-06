@@ -7,6 +7,7 @@ import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
+import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
 import com.example.noties.common.utils.MY_ARG
@@ -14,6 +15,7 @@ import com.example.noties.common.utils.MY_URI
 import com.example.noties.common.utils.NOTE_ID
 import com.example.noties.feature.presentation.add_edit_notes.EditNoteScreen
 import com.example.noties.feature.presentation.notes.NotesScreen
+import com.example.noties.feature.presentation.notes.camera.CameraScreen
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 
@@ -28,7 +30,9 @@ fun Navigation(
         startDestination = Screen.NotesScreen.route,
     ) {
         composable(
-            Screen.NotesScreen.route
+            route = Screen.NotesScreen.route,
+            exitTransition = null,
+            enterTransition = null
         ) {
             NotesScreen(navController = navController)
         }
@@ -36,10 +40,10 @@ fun Navigation(
         composable(
             route = Screen.EditScreen.route,
             exitTransition = {
-                slideOutOfContainer(AnimatedContentScope.SlideDirection.Down, animationSpec = tween(700))
+                slideOutOfContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
             },
             enterTransition = {
-                slideIntoContainer(AnimatedContentScope.SlideDirection.Up, animationSpec = tween(700))
+                slideIntoContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
             },
             arguments = listOf(navArgument(MY_ARG) { type = NavType.LongType }),
             deepLinks = listOf(navDeepLink { uriPattern = "$MY_URI/$MY_ARG={$MY_ARG}" })
@@ -65,5 +69,23 @@ fun Navigation(
         ) {
             EditNoteScreen(navController = navController)
         }
+
+        composable(
+            route = Screen.CameraScreen.route,
+            exitTransition = {
+                slideOutOfContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
+            },
+            enterTransition = {
+                slideIntoContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
+            }
+        ) {
+            navController.previousBackStackEntry?.savedStateHandle?.get<Long>(ID_BACK_STACK)?.let {
+                CameraScreen(noteId = it, navController = navController)
+            }
+
+        }
     }
+
 }
+
+const val ID_BACK_STACK = "ID"

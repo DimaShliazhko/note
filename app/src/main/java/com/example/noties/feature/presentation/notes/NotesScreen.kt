@@ -73,7 +73,9 @@ fun NotesScreen(
                 })
         },
         drawerContent = {
-            DrawerMenu(allDeleteClick = { viewModel.setEvent(NotesEvent.DeleteAllNote) })
+            DrawerMenu(
+                allDeleteClick = { viewModel.setEvent(NotesEvent.DeleteAllNote) },
+                throwErrorClick = { throw Error("something wrong happened") })
         },
         floatingActionButton = {
             if (!listState.isScrollInProgress) {

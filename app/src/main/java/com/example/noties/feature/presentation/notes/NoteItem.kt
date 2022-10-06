@@ -50,6 +50,7 @@ fun NoteItem(
                         highlight = PlaceholderHighlight.shimmer(highlightColor = Color.White),
                     ),
                 text = note.title,
+                maxLines = 1,
                 fontSize = MaterialTheme.fontSize.large,
                 textAlign = TextAlign.Start
             )
@@ -63,6 +64,7 @@ fun NoteItem(
                         shape = RoundedCornerShape(8.dp),
                         highlight = PlaceholderHighlight.shimmer(highlightColor = Color.White),
                     ),
+                maxLines = 3,
                 text = note.content,
                 fontSize = MaterialTheme.fontSize.medium,
                 textAlign = TextAlign.Start

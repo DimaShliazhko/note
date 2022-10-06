@@ -15,7 +15,9 @@ class EditNoteViewModel @Inject constructor(
     private val alarmUtil: AlarmUtils,
 ) : BaseViewModel<EditNoteEvent, EditNoteState, EditNoteAction>() {
 
-    init {}
+    init {
+    }
+
 
     private fun getNoteById(noteId: Long) {
         viewModelScope.launch {
@@ -26,6 +28,7 @@ class EditNoteViewModel @Inject constructor(
                 title = note.title,
                 notificationTime = note.notificationTime,
                 color = note.color,
+                uri = note.uri
             )
         }
     }
@@ -60,7 +63,8 @@ class EditNoteViewModel @Inject constructor(
                         content = _state.value.content,
                         notificationTime = _state.value.notificationTime,
                         color = _state.value.color,
-                        addTime = System.currentTimeMillis()
+                        addTime = System.currentTimeMillis(),
+                        uri = _state.value.uri,
                     )
                     noteUseCase.deleteNotesUseCase(note = note)
                 }
@@ -72,7 +76,8 @@ class EditNoteViewModel @Inject constructor(
                     content = _state.value.content,
                     notificationTime = _state.value.notificationTime,
                     color = _state.value.color,
-                    addTime = System.currentTimeMillis()
+                    addTime = System.currentTimeMillis(),
+                    uri = _state.value.uri,
                 )
                 _state.value.id?.let {
                     viewModelScope.launch {

@@ -3,9 +3,9 @@ package com.example.noties.feature.presentation.add_edit_notes
 import android.annotation.SuppressLint
 import androidx.compose.animation.Animatable
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
@@ -25,13 +25,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import coil.compose.rememberImagePainter
 import com.example.noties.R
 import com.example.noties.common.extension.toDate
+import com.example.noties.common.navigation.ID_BACK_STACK
+import com.example.noties.common.navigation.Screen
 import com.example.noties.feature.domain.model.Note
 import kotlinx.coroutines.launch
 
@@ -42,17 +44,21 @@ fun EditNoteScreen(
     noteId: Long? = null,
     viewModel: EditNoteViewModel = hiltViewModel()
 ) {
-    LaunchedEffect(key1 = noteId) {
-        if (noteId != null) {
-            viewModel.setEvent(EditNoteEvent.LoadNote(noteId))
-        }
-    }
+
     val context = LocalContext.current
     val state = viewModel.state.value
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
+    val scroll = rememberScrollState()
+
     var colorAnimatable = remember {
         Animatable(Color(state.color))
+    }
+
+    LaunchedEffect(key1 = noteId) {
+        if (noteId != null) {
+            viewModel.setEvent(EditNoteEvent.LoadNote(noteId))
+        }
     }
 
     Scaffold(
@@ -72,8 +78,11 @@ fun EditNoteScreen(
                 onDeleteClick = {
                     viewModel.setEvent(EditNoteEvent.DeleteNote)
                     navController.navigateUp()
+                },
+                takePictureClick = {
+                    navController.currentBackStackEntry?.savedStateHandle?.set(ID_BACK_STACK, noteId)
+                    navController.navigate(Screen.CameraScreen.route)
                 }
-
             )
         },
         floatingActionButton = {
@@ -100,6 +109,7 @@ fun EditNoteScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .background(colorAnimatable.value)
+                // .verticalScroll(scroll)
                 .padding(16.dp)
         ) {
             Row(
@@ -144,7 +154,7 @@ fun EditNoteScreen(
                     horizontalArrangement = Arrangement.Start,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Icon(imageVector =  ImageVector.vectorResource(R.drawable.ic_time), contentDescription ="timer")
+                    Icon(imageVector = ImageVector.vectorResource(R.drawable.ic_time), contentDescription = "timer")
                     Spacer(modifier = Modifier.width(10.dp))
                     Text(text = it.toDate())
                     IconButton(onClick = { viewModel.setEvent(EditNoteEvent.DeleteTimer) }) {
@@ -176,9 +186,16 @@ fun EditNoteScreen(
                 },
                 isHintVisible = state.content.isEmpty(),
                 textStyle = MaterialTheme.typography.body1,
-                modifier = Modifier.fillMaxHeight(),
                 onFocusChange = {
                 }
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            Image(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(30.dp),
+                painter = rememberImagePainter(state.uri),
+                contentDescription = ""
             )
         }
     }

@@ -24,11 +24,15 @@ class NoteRepositoryImpl(
         noteDao.deleteNote(note)
     }
 
-    override suspend fun deleteAllNotes(id :List<Long>) {
+    override suspend fun deleteAllNotes(id: List<Long>) {
         noteDao.deleteAllNote(id)
     }
 
     override suspend fun editNotes(note: NoteEntity) {
         noteDao.updateNote(note)
+    }
+
+    override suspend fun setImgUri(id: Long, uri: String) {
+        noteDao.setImgUri(id, uri)
     }
 }

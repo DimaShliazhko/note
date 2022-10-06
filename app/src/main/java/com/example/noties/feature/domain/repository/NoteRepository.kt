@@ -10,4 +10,5 @@ interface NoteRepository {
     suspend fun deleteNotes(note: NoteEntity)
     suspend fun deleteAllNotes(id: List<Long>)
     suspend fun editNotes(note: NoteEntity)
+    suspend fun setImgUri(id: Long, uri: String)
 }

@@ -6,4 +6,8 @@
     <string name="title">Title</string>
     <string name="date">Date</string>
     <string name="delete_all_note">delete all note</string>
+    <string name="throw_error">throw error</string>
+    <string name="ok">ok</string>
+    <string name="cancel">cancel</string>
+    <string name="error">error</string>
 </resources>

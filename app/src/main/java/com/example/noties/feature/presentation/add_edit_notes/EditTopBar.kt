@@ -8,18 +8,22 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.runtime.Composable
+import androidx.compose.material.icons.filled.PictureAsPdf
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
 import com.example.noties.ui.theme.Purple500
 
 @Composable
 fun EditTopBar(
     onTimePickClick: () -> Unit,
-    onDeleteClick: () -> Unit
+    onDeleteClick: () -> Unit,
+    takePictureClick: @Composable () -> Unit
 ) {
+    var takePicture by remember { mutableStateOf(false) }
 
+    if (takePicture) {
+        takePictureClick()
+    }
     TopAppBar(
         modifier = Modifier.fillMaxWidth(),
         backgroundColor = Purple500,
@@ -37,6 +41,12 @@ fun EditTopBar(
                 onClick = { onDeleteClick() }) {
                 Icon(imageVector = Icons.Default.Delete, contentDescription = "")
             }
+
+            IconButton(
+                onClick = { takePicture = !takePicture }) {
+                Icon(imageVector = Icons.Default.PictureAsPdf, contentDescription = "")
+            }
+
         }
     )
 }

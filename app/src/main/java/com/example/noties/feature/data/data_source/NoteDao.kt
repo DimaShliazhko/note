@@ -24,4 +24,7 @@ interface NoteDao {
 
     @Update
     suspend fun updateNote(note: NoteEntity)
+
+    @Query("UPDATE note SET uri =:uri WHERE id = :id ")
+    suspend fun setImgUri(id: Long, uri: String)
 }

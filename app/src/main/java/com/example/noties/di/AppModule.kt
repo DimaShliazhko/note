@@ -50,8 +50,15 @@ object AppModule {
             getNoteByIdUseCase = GetNoteByIdUseCase(noteRepository),
             insertNotesUseCase = InsertNotesUseCase(noteRepository),
             editNotesUseCase = EditNotesUseCase(noteRepository),
-            deleteAllNotesUseCase = DeleteAllNotesUseCase(noteRepository,alarmUtil)
+            deleteAllNotesUseCase = DeleteAllNotesUseCase(noteRepository, alarmUtil),
+            setImgToNotesUseCase = SetImgToNotesUseCase(noteRepository)
         )
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetOutputDirectoryUseCase(context: Context): GetOutputDirectoryUseCase {
+        return GetOutputDirectoryUseCase(context)
     }
 
     @Provides

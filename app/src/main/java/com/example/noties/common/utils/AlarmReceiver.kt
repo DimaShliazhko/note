@@ -7,22 +7,24 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class AlarmReceiver : BroadcastReceiver() {
+class AlarmReceiver @Inject constructor(
+) : BroadcastReceiver() {
 
     @Inject
     lateinit var notificationUtils: NotificationUtils
-
     override fun onReceive(context: Context, intent: Intent) {
+        val title = intent.getStringExtra(NOTE_TITLE)
+        Intent(context, SpeechService::class.java).apply {
+            putExtra(NOTE_TITLE, title)
+            context.startService(this)
+        }
         createNotification(intent)
-        /*     when(intent.action){
-                 ACTION ->
-             }
-     */
     }
 
     private fun createNotification(intent: Intent) {
         val title = intent.getStringExtra(NOTE_TITLE)
-        val noteId = intent.getLongExtra(NOTE_ID,-1)
-        notificationUtils.crateInitialSync(title,noteId)
+        val noteId = intent.getLongExtra(NOTE_ID, -1)
+        notificationUtils.crateInitialSync(title, noteId)
     }
+
 }

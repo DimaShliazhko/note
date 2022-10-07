@@ -6,6 +6,8 @@
     <uses-feature android:name="android.hardware.camera.any" />
 
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
 
     <application
         android:name=".App"
@@ -32,11 +34,11 @@
 
         <receiver
             android:name=".common.utils.AlarmReceiver"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.example.action.notification" />
-            </intent-filter>
-        </receiver>
+            android:process=":remote" />
+
+        <service
+            android:name=".common.utils.SpeechService"
+            android:exported="true" />
     </application>
 
 </manifest>

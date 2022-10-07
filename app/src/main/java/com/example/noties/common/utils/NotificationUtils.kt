@@ -74,6 +74,5 @@ class NotificationUtils @Inject constructor(
     companion object {
         private const val CHANNEL_ID = "NOTIFICATION_CHANNEL_ID"
         private const val CHANNEL_NAME = "COUNT_ID"
-        const val NOTIFICATION_ID = 0
     }
 }

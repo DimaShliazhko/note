@@ -5,9 +5,7 @@ import com.example.noties.feature.domain.model.toNote
 import com.example.noties.feature.domain.model.toNoteEntity
 import com.example.noties.feature.domain.repository.NoteRepository
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.forEach
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 class DeleteAllNotesUseCase @Inject constructor(

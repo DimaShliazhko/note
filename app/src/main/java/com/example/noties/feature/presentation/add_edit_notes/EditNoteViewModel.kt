@@ -5,6 +5,7 @@ import com.example.noties.common.base.BaseViewModel
 import com.example.noties.common.utils.AlarmUtils
 import com.example.noties.feature.domain.model.Note
 import com.example.noties.feature.domain.use_case.NoteUseCase
+import com.example.noties.feature.presentation.notes.camera.CameraEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -93,6 +94,12 @@ class EditNoteViewModel @Inject constructor(
                     if (_state.value.notificationTime!! >= System.currentTimeMillis()) {
                         setAlarm(_state.value.notificationTime!!, _state.value)
                     }
+                }
+            }
+            is EditNoteEvent.SetUri ->{
+                viewModelScope.launch {
+                    noteUseCase.setImgToNotesUseCase(id = event.id, uri = event.uri)
+                    _state.value = _state.value.copy(uri = event.uri)
                 }
             }
         }

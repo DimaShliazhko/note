@@ -1,11 +1,13 @@
 package com.example.noties.feature.presentation.add_edit_notes
 
 import android.annotation.SuppressLint
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.*
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
@@ -13,10 +15,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Send
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -35,6 +34,8 @@ import com.example.noties.common.extension.toDate
 import com.example.noties.common.navigation.ID_BACK_STACK
 import com.example.noties.common.navigation.Screen
 import com.example.noties.feature.domain.model.Note
+import com.example.noties.feature.presentation.notes.camera.CameraEvent
+import com.example.noties.feature.presentation.notes.dialog.PhotoCameraPicker
 import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -49,7 +50,18 @@ fun EditNoteScreen(
     val state = viewModel.state.value
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
-    val scroll = rememberScrollState()
+    var imageUri: Any? by remember { mutableStateOf(null) }
+    var showPickDialog by remember { mutableStateOf(false) }
+    val photoPicker = rememberLauncherForActivityResult(contract = ActivityResultContracts.PickVisualMedia()) {
+        if (it != null) {
+            imageUri = it
+            showPickDialog = false
+            viewModel.setEvent(EditNoteEvent.SetUri(uri = imageUri as Uri, id = noteId!!))
+        } else {
+
+        }
+    }
+
 
     var colorAnimatable = remember {
         Animatable(Color(state.color))
@@ -80,8 +92,7 @@ fun EditNoteScreen(
                     navController.navigateUp()
                 },
                 takePictureClick = {
-                    navController.currentBackStackEntry?.savedStateHandle?.set(ID_BACK_STACK, noteId)
-                    navController.navigate(Screen.CameraScreen.route)
+                    showPickDialog = true
                 }
             )
         },
@@ -105,98 +116,122 @@ fun EditNoteScreen(
             }
         }
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(colorAnimatable.value)
-                // .verticalScroll(scroll)
-                .padding(16.dp)
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Note.listColors.forEach { color ->
-                    val colorInt = color.toArgb()
-                    Box(
-                        modifier = Modifier
-                            .size(50.dp)
-                            .shadow(15.dp, CircleShape)
-                            .background(color)
-                            .clip(CircleShape)
-                            .border(
-                                width = 2.dp,
-                                color = if (colorInt == colorAnimatable.value.toArgb()) {
-                                    Color.Black
-                                } else {
-                                    Color.Transparent
-                                },
-                                shape = CircleShape
-
+        Box(modifier = Modifier.fillMaxSize()) {
+            if (showPickDialog) {
+                PhotoCameraPicker(
+                    pickGallery = {
+                        photoPicker.launch(
+                            PickVisualMediaRequest(
+                                ActivityResultContracts.PickVisualMedia.ImageOnly
                             )
-                            .clickable {
-                                scope.launch {
-                                    colorAnimatable.animateTo(
-                                        targetValue = Color(colorInt),
-                                        animationSpec = tween(durationMillis = 500)
-                                    )
-                                    viewModel.setEvent(EditNoteEvent.AddColor(colorAnimatable.value.toArgb()))
-                                }
-                            }
-                    ) {
+                        )
+                    },
+                    pickTakePhoto = {
+                        navController.currentBackStackEntry?.savedStateHandle?.set(ID_BACK_STACK, noteId)
+                        navController.navigate(Screen.CameraScreen.route)
                     }
-                }
+                )
             }
-            Spacer(modifier = Modifier.height(16.dp))
-            state.notificationTime?.let {
+
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(colorAnimatable.value)
+                    .padding(16.dp)
+            ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Start,
-                    verticalAlignment = Alignment.CenterVertically
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Icon(imageVector = ImageVector.vectorResource(R.drawable.ic_time), contentDescription = "timer")
-                    Spacer(modifier = Modifier.width(10.dp))
-                    Text(text = it.toDate())
-                    IconButton(onClick = { viewModel.setEvent(EditNoteEvent.DeleteTimer) }) {
-                        Icon(imageVector = Icons.Default.Delete, contentDescription = "delete timer")
+                    Note.listColors.forEach { color ->
+                        val colorInt = color.toArgb()
+                        Box(
+                            modifier = Modifier
+                                .size(50.dp)
+                                .shadow(15.dp, CircleShape)
+                                .background(color)
+                                .clip(CircleShape)
+                                .border(
+                                    width = 2.dp,
+                                    color = if (colorInt == colorAnimatable.value.toArgb()) {
+                                        Color.Black
+                                    } else {
+                                        Color.Transparent
+                                    },
+                                    shape = CircleShape
+
+                                )
+                                .clickable {
+                                    scope.launch {
+                                        colorAnimatable.animateTo(
+                                            targetValue = Color(colorInt),
+                                            animationSpec = tween(durationMillis = 500)
+                                        )
+                                        viewModel.setEvent(EditNoteEvent.AddColor(colorAnimatable.value.toArgb()))
+                                    }
+                                }
+                        ) {
+                        }
                     }
                 }
-
                 Spacer(modifier = Modifier.height(16.dp))
-            }
-            TransparentHintTextField(
-                text = state.title,
-                hint = "Title here...",
-                onValueChange = {
-                    viewModel.setEvent(EditNoteEvent.AddTitle(it))
-                },
-                isHintVisible = state.title.isEmpty(),
-                singleLine = true,
-                textStyle = MaterialTheme.typography.h5,
-                onFocusChange = {
-                }
-            )
-            Spacer(modifier = Modifier.height(16.dp))
+                state.notificationTime?.let {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Start,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(imageVector = ImageVector.vectorResource(R.drawable.ic_time), contentDescription = "timer")
+                        Spacer(modifier = Modifier.width(10.dp))
+                        Text(text = it.toDate())
+                        IconButton(onClick = { viewModel.setEvent(EditNoteEvent.DeleteTimer) }) {
+                            Icon(imageVector = Icons.Default.Delete, contentDescription = "delete timer")
+                        }
+                    }
 
-            TransparentHintTextField(
-                text = state.content,
-                hint = "Content here...",
-                onValueChange = {
-                    viewModel.setEvent(EditNoteEvent.AddContent(it))
-                },
-                isHintVisible = state.content.isEmpty(),
-                textStyle = MaterialTheme.typography.body1,
-                onFocusChange = {
+                    Spacer(modifier = Modifier.height(16.dp))
                 }
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            Image(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(30.dp),
-                painter = rememberImagePainter(state.uri),
-                contentDescription = ""
-            )
+                TransparentHintTextField(
+                    text = state.title,
+                    hint = "Title here...",
+                    onValueChange = {
+                        viewModel.setEvent(EditNoteEvent.AddTitle(it))
+                    },
+                    isHintVisible = state.title.isEmpty(),
+                    singleLine = true,
+                    textStyle = MaterialTheme.typography.h5,
+                    onFocusChange = {
+                    }
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+
+                TransparentHintTextField(
+                    text = state.content,
+                    hint = "Content here...",
+                    onValueChange = {
+                        viewModel.setEvent(EditNoteEvent.AddContent(it))
+                    },
+                    isHintVisible = state.content.isEmpty(),
+                    textStyle = MaterialTheme.typography.body1,
+                    onFocusChange = {
+                    }
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                Image(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(30.dp),
+                    painter = rememberImagePainter(
+                        if (imageUri != null) {
+                            imageUri as Uri
+                        } else {
+                            state.uri
+                        }
+
+                    ),
+                    contentDescription = ""
+                )
+            }
         }
     }
 }

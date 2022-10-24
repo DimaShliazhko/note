@@ -5,6 +5,8 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,6 +21,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.noties.common.navigation.Navigation
 import com.example.noties.common.utils.exception.GlobalExceptionHandler
+import com.example.noties.common.utils.exception.checkPermissions
 import com.example.noties.feature.presentation.notes.dialog.ErrorDialog
 import com.example.noties.ui.theme.NotiesTheme
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
@@ -27,6 +30,11 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
+    private val permissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) {
+
+    }
     private val requiresPermission = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted ->
@@ -40,7 +48,12 @@ class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalAnimationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        requestCameraPermission()
+        val temp = this.checkPermissions()
+        if (temp.isNotEmpty()) {
+            permissionLauncher.launch(temp.toTypedArray())
+        }
+
+
 
         setContent {
             NotiesTheme {

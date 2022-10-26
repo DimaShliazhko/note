@@ -6,11 +6,14 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStoreFile
+import androidx.media3.common.Player
+import androidx.media3.exoplayer.ExoPlayer
 import androidx.room.Room
 import com.example.noties.common.utils.AlarmUtils
 import com.example.noties.feature.data.data_source.NoteDataBase
 import com.example.noties.feature.data.repository.NoteRepositoryImpl
-import com.example.noties.feature.data.repository.PrefDataRepositoryImpl
+import com.example.noties.feature.domain.model.metadatas.MetaDataReader
+import com.example.noties.feature.domain.model.metadatas.MetaDataReaderImpl
 import com.example.noties.feature.domain.repository.NoteRepository
 import com.example.noties.feature.domain.repository.PrefDataRepository
 import com.example.noties.feature.domain.use_case.*
@@ -43,7 +46,11 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideNotesUseCase(noteRepository: NoteRepository, alarmUtil: AlarmUtils): NoteUseCase {
+    fun provideNotesUseCase(
+        noteRepository: NoteRepository,
+        alarmUtil: AlarmUtils,
+        metaDataReader: MetaDataReader
+    ): NoteUseCase {
         return NoteUseCase(
             getNotesUseCase = GetNotesUseCase(noteRepository),
             deleteNotesUseCase = DeleteNotesUseCase(noteRepository, alarmUtil),
@@ -51,7 +58,7 @@ object AppModule {
             insertNotesUseCase = InsertNotesUseCase(noteRepository),
             editNotesUseCase = EditNotesUseCase(noteRepository),
             deleteAllNotesUseCase = DeleteAllNotesUseCase(noteRepository, alarmUtil),
-            setImgToNotesUseCase = SetImgToNotesUseCase(noteRepository)
+            setImgToNotesUseCase = SetImgToNotesUseCase(noteRepository),
         )
     }
 
@@ -90,6 +97,19 @@ object AppModule {
         return PreferenceDataStoreFactory.create(
             produceFile = { app.preferencesDataStoreFile(PREFERENCES) }
         )
+    }
+
+    @Provides
+    @Singleton
+    fun provideVideoPlayer(@ApplicationContext app: Context): Player {
+        return ExoPlayer.Builder(app).build()
+    }
+
+
+    @Provides
+    @Singleton
+    fun provideMetaDataReader(@ApplicationContext app: Context): MetaDataReader {
+        return MetaDataReaderImpl(app)
     }
 
 }

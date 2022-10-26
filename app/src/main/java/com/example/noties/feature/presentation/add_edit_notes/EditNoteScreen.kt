@@ -23,11 +23,13 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
 import com.example.noties.R
 import com.example.noties.common.extension.toDate
@@ -221,7 +223,8 @@ fun EditNoteScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(30.dp),
-                    painter = rememberImagePainter(
+                    contentScale = ContentScale.Crop,
+                    painter = rememberAsyncImagePainter(
                         if (imageUri != null) {
                             imageUri as Uri
                         } else {
@@ -229,7 +232,7 @@ fun EditNoteScreen(
                         }
 
                     ),
-                    contentDescription = ""
+                    contentDescription = "kk"
                 )
             }
         }

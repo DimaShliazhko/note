@@ -15,4 +15,5 @@
     <string name="pick_photo">photo</string>
     <string name="choose">choose a photo or take a photo</string>
     <string name="choose_title">Choose</string>
+    <string name="open_video_screen">onen video screen</string>
 </resources>

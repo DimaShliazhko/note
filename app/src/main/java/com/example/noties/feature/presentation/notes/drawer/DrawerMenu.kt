@@ -8,6 +8,7 @@ import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Error
+import androidx.compose.material.icons.filled.Videocam
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -20,6 +21,7 @@ fun DrawerMenu(
     modifier: Modifier = Modifier,
     allDeleteClick: () -> Unit,
     throwErrorClick: () -> Unit,
+    openVideoScreenClick: () -> Unit,
 ) {
     Column(
         modifier = modifier
@@ -42,5 +44,14 @@ fun DrawerMenu(
                 text = stringResource(id = R.string.throw_error),
             )
         }
+
+        TextButton(
+            onClick = { openVideoScreenClick() }) {
+            Icon(imageVector = Icons.Default.Videocam, contentDescription = "note delete all")
+            Text(
+                text = stringResource(id = R.string.open_video_screen),
+            )
+        }
+
     }
 }

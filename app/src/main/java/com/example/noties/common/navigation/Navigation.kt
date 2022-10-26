@@ -16,6 +16,7 @@ import com.example.noties.common.utils.NOTE_ID
 import com.example.noties.feature.presentation.add_edit_notes.EditNoteScreen
 import com.example.noties.feature.presentation.notes.NotesScreen
 import com.example.noties.feature.presentation.notes.camera.CameraScreen
+import com.example.noties.feature.presentation.notes.video.VideoScreen
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 
@@ -83,6 +84,18 @@ fun Navigation(
                 CameraScreen(noteId = it, navController = navController)
             }
 
+        }
+
+        composable(
+            route = Screen.VideoScreen.route,
+            exitTransition = {
+                slideOutOfContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
+            },
+            enterTransition = {
+                slideIntoContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
+            }
+        ) {
+            VideoScreen(navController = navController)
         }
     }
 

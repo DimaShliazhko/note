@@ -7,5 +7,5 @@ data class NoteUseCase(
     val insertNotesUseCase: InsertNotesUseCase,
     val editNotesUseCase: EditNotesUseCase,
     val deleteAllNotesUseCase: DeleteAllNotesUseCase,
-    val setImgToNotesUseCase: SetImgToNotesUseCase
-)
+    val setImgToNotesUseCase: SetImgToNotesUseCase,
+  )

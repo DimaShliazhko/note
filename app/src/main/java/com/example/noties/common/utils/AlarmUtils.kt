@@ -1,7 +1,6 @@
 package com.example.noties.common.utils
 
 import android.app.AlarmManager
-import android.app.Application
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -19,13 +18,15 @@ class AlarmUtils @Inject constructor(
             putExtra(NOTE_ID, id)
             action = ACTION
         }
-        val pendingIntent = PendingIntent.getBroadcast(context, id.toInt(), intent, 0)
+        val pendingIntent = PendingIntent.getBroadcast(context, id.toInt(), intent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
         alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, time, pendingIntent)
     }
 
     fun cancelAlarm( id: Long) {
         val intent = Intent(context, AlarmReceiver::class.java)
-        val pendingIntent = PendingIntent.getBroadcast(context, id.toInt(), intent, 0)
+        val pendingIntent = PendingIntent.getBroadcast(context, id.toInt(), intent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
         alarmManager.cancel(pendingIntent)
     }
 }

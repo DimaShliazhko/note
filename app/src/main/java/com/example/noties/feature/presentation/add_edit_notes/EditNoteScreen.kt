@@ -57,8 +57,7 @@ fun EditNoteScreen(
     val photoPicker = rememberLauncherForActivityResult(contract = ActivityResultContracts.PickVisualMedia()) {
         if (it != null) {
             imageUri = it
-            showPickDialog = false
-            viewModel.setEvent(EditNoteEvent.SetUri(uri = imageUri as Uri, id = noteId!!))
+                     viewModel.setEvent(EditNoteEvent.SetUri(uri = imageUri as Uri, id = noteId!!))
         } else {
 
         }
@@ -122,6 +121,7 @@ fun EditNoteScreen(
             if (showPickDialog) {
                 PhotoCameraPicker(
                     pickGallery = {
+                        showPickDialog = false
                         photoPicker.launch(
                             PickVisualMediaRequest(
                                 ActivityResultContracts.PickVisualMedia.ImageOnly
@@ -129,6 +129,7 @@ fun EditNoteScreen(
                         )
                     },
                     pickTakePhoto = {
+                        showPickDialog = false
                         navController.currentBackStackEntry?.savedStateHandle?.set(ID_BACK_STACK, noteId)
                         navController.navigate(Screen.CameraScreen.route)
                     }

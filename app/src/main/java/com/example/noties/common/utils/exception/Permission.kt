@@ -13,6 +13,13 @@ fun Context.hasReadPermission(): Boolean {
 
 }
 
+fun Context.hasPostNotification(): Boolean {
+    val minSDK = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+    return (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+            == PackageManager.PERMISSION_GRANTED)
+
+}
+
 fun Context.hasWritePermission(): Boolean {
     val minSDK = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
     return (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -32,6 +39,10 @@ fun Context.checkPermissions(): List<String> {
     if (!this.hasWritePermission()) {
         permissionToRequest.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
     }
+    if (!this.hasPostNotification()) {
+        permissionToRequest.add(Manifest.permission.POST_NOTIFICATIONS)
+    }
+
     if (!this.hasCameraPermission()) {
         permissionToRequest.add(Manifest.permission.CAMERA)
     }

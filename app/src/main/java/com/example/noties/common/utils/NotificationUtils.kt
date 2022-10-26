@@ -62,7 +62,7 @@ class NotificationUtils @Inject constructor(
         }
         val pendingIntent = TaskStackBuilder.create(context).run {
             addNextIntentWithParentStack(intent)
-            getPendingIntent(1, PendingIntent.FLAG_UPDATE_CURRENT)
+            getPendingIntent(1, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
         }
         return pendingIntent
     }

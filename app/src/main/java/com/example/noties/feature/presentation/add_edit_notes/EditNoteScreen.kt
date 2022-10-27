@@ -177,6 +177,7 @@ fun EditNoteScreen(
                         }
                     }
                 }
+                
                 Spacer(modifier = Modifier.height(16.dp))
                 state.notificationTime?.let {
                     Row(

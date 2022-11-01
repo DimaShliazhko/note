@@ -7,6 +7,9 @@ sealed class Screen(val route: String) {
     object AddNotesScreen : Screen("add_notes_screen")
     object CameraScreen : Screen("camera_screen")
     object VideoScreen : Screen("video_screen")
+    object GoogleScreen : Screen("google_screen")
+    object DeepLinkScreen : Screen("deep_link_screen")
+    object DeepLinkDetailScreen : Screen("deep_link_detail_screen")
     object EditScreen : Screen("edit_screen/{$MY_ARG}") {
         fun passNoteId(noteId: Long) = "edit_screen/$noteId"
     }

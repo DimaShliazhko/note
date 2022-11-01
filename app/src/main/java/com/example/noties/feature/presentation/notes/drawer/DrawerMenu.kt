@@ -6,9 +6,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Error
-import androidx.compose.material.icons.filled.Videocam
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,6 +20,8 @@ fun DrawerMenu(
     allDeleteClick: () -> Unit,
     throwErrorClick: () -> Unit,
     openVideoScreenClick: () -> Unit,
+    openGoogleScreenClick: () -> Unit,
+    openDeepLinkScreenClick: () -> Unit,
 ) {
     Column(
         modifier = modifier
@@ -52,6 +52,28 @@ fun DrawerMenu(
                 text = stringResource(id = R.string.open_video_screen),
             )
         }
+        TextButton(
+            onClick = { openGoogleScreenClick() }) {
+            Icon(
+                imageVector = Icons.Default.Login,
+                contentDescription = stringResource(id = R.string.open_google_button)
+            )
+            Text(
+                text = stringResource(id = R.string.open_google_button),
+            )
+        }
+
+        TextButton(
+            onClick = { openDeepLinkScreenClick() }) {
+            Icon(
+                imageVector = Icons.Default.ModeEdit,
+                contentDescription = stringResource(id = R.string.open_deep_link)
+            )
+            Text(
+                text = stringResource(id = R.string.open_deep_link),
+            )
+        }
+
 
     }
 }

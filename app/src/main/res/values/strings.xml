@@ -15,5 +15,11 @@
     <string name="pick_photo">photo</string>
     <string name="choose">choose a photo or take a photo</string>
     <string name="choose_title">Choose</string>
-    <string name="open_video_screen">onen video screen</string>
+    <string name="open_video_screen">open video screen</string>
+    <string name="open_google_button">open google button</string>
+    <string name="sign_google">Sign Up google</string>
+    <string name="create_account">Creating acount...</string>
+    <string name="open_deep_link">open Deep Link</string>
+    <string name="deep_link_detail">detail screen</string>
+    <string name="deep_link_telegram">Move Telegram</string>
 </resources>

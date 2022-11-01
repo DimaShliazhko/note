@@ -76,7 +76,10 @@ fun NotesScreen(
             DrawerMenu(
                 allDeleteClick = { viewModel.setEvent(NotesEvent.DeleteAllNote) },
                 throwErrorClick = { throw Error("something wrong happened") },
-            openVideoScreenClick = {navController.navigate((Screen.VideoScreen.route))})
+                openVideoScreenClick = { navController.navigate((Screen.VideoScreen.route)) },
+                openGoogleScreenClick = { navController.navigate((Screen.GoogleScreen.route)) },
+                openDeepLinkScreenClick = {navController.navigate((Screen.DeepLinkScreen.route)) }
+            )
         },
         floatingActionButton = {
             if (!listState.isScrollInProgress) {

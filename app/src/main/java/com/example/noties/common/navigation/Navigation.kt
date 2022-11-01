@@ -1,13 +1,12 @@
 package com.example.noties.common.navigation
 
+import android.content.Intent
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
-import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
 import com.example.noties.common.utils.MY_ARG
@@ -16,6 +15,9 @@ import com.example.noties.common.utils.NOTE_ID
 import com.example.noties.feature.presentation.add_edit_notes.EditNoteScreen
 import com.example.noties.feature.presentation.notes.NotesScreen
 import com.example.noties.feature.presentation.notes.camera.CameraScreen
+import com.example.noties.feature.presentation.notes.deep_link.DeepLinkDetailScreen
+import com.example.noties.feature.presentation.notes.deep_link.DeepLinkScreen
+import com.example.noties.feature.presentation.notes.login_google.GoogleScreen
 import com.example.noties.feature.presentation.notes.video.VideoScreen
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
@@ -96,6 +98,57 @@ fun Navigation(
             }
         ) {
             VideoScreen(navController = navController)
+        }
+
+        composable(
+            route = Screen.GoogleScreen.route,
+            exitTransition = {
+                slideOutOfContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
+            },
+            enterTransition = {
+                slideIntoContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
+            }
+        ) {
+            GoogleScreen(navController = navController)
+        }
+
+        composable(
+            route = Screen.DeepLinkScreen.route,
+            exitTransition = {
+                slideOutOfContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
+            },
+            enterTransition = {
+                slideIntoContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
+            }
+        ) {
+            DeepLinkScreen(navController = navController)
+        }
+
+        composable(
+            route = Screen.DeepLinkDetailScreen.route,
+            exitTransition = {
+                slideOutOfContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
+            },
+            enterTransition = {
+                slideIntoContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
+            },
+            deepLinks = listOf(
+                navDeepLink {
+                    uriPattern = "https://noties.com/{id}"
+                    action = Intent.ACTION_VIEW
+                }
+            ),
+            arguments = listOf(
+                navArgument("id") {
+                    type = NavType.IntType
+                    defaultValue = -1
+                }
+            )
+        ) { entry ->
+            DeepLinkDetailScreen(
+                id = entry.arguments?.getInt("id") ?: 1,
+                navController = navController
+            )
         }
     }
 

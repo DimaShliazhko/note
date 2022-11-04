@@ -21,6 +21,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.media3.ui.PlayerView
 import androidx.navigation.NavHostController
+import com.example.noties.common.analytic.AnalyticsLoggerIml
 
 @Composable
 fun VideoScreen(
@@ -31,15 +32,22 @@ fun VideoScreen(
         contract = ActivityResultContracts.GetContent(),
         onResult = { uri -> uri?.let(viewModel::addVideoUri) })
 
+    val analyticsLogger = AnalyticsLoggerIml()
+
     var lifecycle by remember { mutableStateOf(Lifecycle.Event.ON_CREATE) }
     var lifecycleOwner = LocalLifecycleOwner.current
 
+
+
     DisposableEffect(key1 = lifecycleOwner) {
+
+        analyticsLogger.registrationLifecycleOwner(navController.currentBackStackEntry?.destination?.displayName, lifecycleOwner)
         val observer = LifecycleEventObserver { _, event ->
             lifecycle = event
         }
         lifecycleOwner.lifecycle.addObserver(observer)
         onDispose {
+            analyticsLogger.removeLifecycleOwner(lifecycleOwner)
             lifecycleOwner.lifecycle.removeObserver(observer)
         }
 

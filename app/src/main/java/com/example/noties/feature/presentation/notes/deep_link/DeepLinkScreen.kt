@@ -10,14 +10,17 @@ import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.app.TaskStackBuilder
 import androidx.navigation.NavHostController
 import com.example.noties.R
+import com.example.noties.common.analytic.AnalyticsLoggerIml
 import com.example.noties.common.navigation.Screen
 
 @Composable
@@ -26,7 +29,16 @@ fun DeepLinkScreen(
 ) {
 
     val context = LocalContext.current
+    val analyticsLogger = AnalyticsLoggerIml()
+    val lifecycleOwner = LocalLifecycleOwner.current
 
+
+    DisposableEffect(key1 = lifecycleOwner){
+        analyticsLogger.registrationLifecycleOwner(navController.currentBackStackEntry?.destination?.route, lifecycleOwner)
+        onDispose {
+            analyticsLogger.removeLifecycleOwner(lifecycleOwner)
+        }
+    }
     Box(
         modifier = Modifier
             .fillMaxSize(),

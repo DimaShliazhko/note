@@ -24,6 +24,8 @@ import com.example.noties.common.navigation.Screen
 import com.example.noties.common.utils.NOTE_ID
 import com.example.noties.feature.domain.model.Note
 import com.example.noties.feature.presentation.notes.drawer.DrawerMenu
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -98,72 +100,79 @@ fun NotesScreen(
             modifier = Modifier.fillMaxSize(),
         ) {
 
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(color = MaterialTheme.colors.onBackground)
-            ) {
-                AnimatedVisibility(
-                    visible = isSortOpen,
-                    enter = fadeIn() + slideInVertically(),
-                    exit = fadeOut() + slideOutVertically(),
-                ) {
-                    SortSection(
-                        viewModel = viewModel,
-                        onSort = {
-                            viewModel.setEvent(NotesEvent.SortNote(it))
-                        })
-                }
-                LazyColumn(
+            SwipeRefresh(
+                state = rememberSwipeRefreshState(isRefreshing = viewModel.state.value.isLoading),
+                onRefresh = {
+                    viewModel.setEvent(NotesEvent.Refresh)
+                    scope.launch { listState.animateScrollToItem(0) }
+                }) {
+
+                Column(
                     modifier = Modifier
-                        .fillMaxSize(),
-                    state = listState
-
+                        .fillMaxWidth()
+                        .background(color = MaterialTheme.colors.onBackground)
                 ) {
-                    if (state.isLoading) {
-                        items(20) {
-                            NoteItem(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .clickable {
-                                    },
-                                note = Note(id = 1, "", "", Color.Gray.copy(alpha = 0.4f).toArgb()),
-                                isLoading = state.isLoading,
-                                onDeleteClick = {
-                                }
-                            )
-                        }
+                    AnimatedVisibility(
+                        visible = isSortOpen,
+                        enter = fadeIn() + slideInVertically(),
+                        exit = fadeOut() + slideOutVertically(),
+                    ) {
+                        SortSection(
+                            viewModel = viewModel,
+                            onSort = {
+                                viewModel.setEvent(NotesEvent.SortNote(it))
+                            })
                     }
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        state = listState
 
-                    items(state.notes, key = { it }) { note ->
-                        if (state.searchText.let { it1 -> note.title.contains(it1) }) {
-                            NoteItem(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .clickable {
-                                        navController.currentBackStackEntry?.savedStateHandle?.set(NOTE_ID, note.id)
-                                        navController.navigate(Screen.EditScreen.passNoteId(note.id!!))
-                                    },
-                                note = note,
-                                isLoading = state.isLoading,
-                                onDeleteClick = {
-                                    viewModel.setEvent(NotesEvent.DeleteNote(note))
-                                    scope.launch {
-                                        val result = scaffoldState.snackbarHostState.showSnackbar(
-                                            message = "Note Delete",
-                                            actionLabel = "Cancel"
-                                        )
-                                        if (result == SnackbarResult.ActionPerformed) {
-                                            viewModel.setEvent(NotesEvent.RestoreNote)
+                    ) {
+                        if (state.isLoading) {
+                            items(20) {
+                                NoteItem(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .clickable {
+                                        },
+                                    note = Note(id = 1, "", "", Color.Gray.copy(alpha = 0.4f).toArgb()),
+                                    isLoading = state.isLoading,
+                                    onDeleteClick = {
+                                    }
+                                )
+                            }
+                        }
+
+                        items(state.notes, key = { it }) { note ->
+                            if (state.searchText.let { it1 -> note.title.contains(it1) }) {
+                                NoteItem(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .clickable {
+                                            navController.currentBackStackEntry?.savedStateHandle?.set(NOTE_ID, note.id)
+                                            navController.navigate(Screen.EditScreen.passNoteId(note.id!!))
+                                        },
+                                    note = note,
+                                    isLoading = state.isLoading,
+                                    onDeleteClick = {
+                                        viewModel.setEvent(NotesEvent.DeleteNote(note))
+                                        scope.launch {
+                                            val result = scaffoldState.snackbarHostState.showSnackbar(
+                                                message = "Note Delete",
+                                                actionLabel = "Cancel"
+                                            )
+                                            if (result == SnackbarResult.ActionPerformed) {
+                                                viewModel.setEvent(NotesEvent.RestoreNote)
+                                            }
                                         }
                                     }
-                                }
-                            )
+                                )
+                            }
                         }
                     }
                 }
             }
-
             if (state.isLoading) {
                 CircularProgressIndicator(
                     modifier = Modifier

@@ -11,4 +11,5 @@ sealed class NotesEvent : Event {
     data class SortNote(val note: SortType) : NotesEvent()
     data class Search(val title: String) : NotesEvent()
     object RestoreNote : NotesEvent()
+    object Refresh : NotesEvent()
 }

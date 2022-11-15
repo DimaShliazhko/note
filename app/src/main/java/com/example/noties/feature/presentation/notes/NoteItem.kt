@@ -1,9 +1,7 @@
 package com.example.noties.feature.presentation.notes
 
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
@@ -50,7 +48,10 @@ fun NoteItem(
 
     val offsetXX by animateFloatAsState(
         targetValue = if (!startOffset) 0f else offsetX,
-        animationSpec = tween(durationMillis = 500, easing = LinearEasing)
+        animationSpec = spring(
+            dampingRatio = Spring.DampingRatioMediumBouncy,
+            stiffness = 100f
+        )
     )
 
 

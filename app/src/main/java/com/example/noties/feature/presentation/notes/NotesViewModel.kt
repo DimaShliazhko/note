@@ -23,7 +23,6 @@ class NotesViewModel @Inject constructor(
     }
 
     private fun getNotes() {
-
         prefUseCase.getSortUseCase().onEach {
             _state.value = _state.value.copy(sortType = it)
             getItem()
@@ -78,6 +77,9 @@ class NotesViewModel @Inject constructor(
                     prefUseCase.setSortUseCase(event.note)
                     setAction(NotesAction.ScrollListUp)
                 }
+            }
+            is NotesEvent.Refresh -> {
+                getNotes()
             }
         }
     }

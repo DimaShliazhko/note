@@ -1,5 +1,6 @@
 package com.example.noties.feature.presentation.notes
 
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -35,13 +36,17 @@ fun NoteItem(
     onDeleteClick: () -> Unit
 ) {
 
-    /*   val offsetX by animateFloatAsState(
-           targetValue = 150f,
-           animationSpec = tween(1000, easing = LinearEasing),
-       )*/
 
     var offsetX by remember { mutableStateOf(0f) }
     var startOffset by remember { mutableStateOf(false) }
+
+
+    val color by animateColorAsState(
+        targetValue = if (!startOffset) Color(note.color) else Color.Gray.copy(alpha = 0.8f),
+        animationSpec = tween(
+            durationMillis = 500, easing = LinearEasing
+        )
+    )
 
     val offsetXX by animateFloatAsState(
         targetValue = if (!startOffset) 0f else offsetX,
@@ -78,6 +83,7 @@ fun NoteItem(
                             }
                         } else {
                             offsetX = 0f
+                            startOffset = false
                         }
 
                     },
@@ -92,7 +98,7 @@ fun NoteItem(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(color = Color(note.color))
+                    .background(color = color)
                     .padding(16.dp),
             ) {
                 Text(

@@ -19,7 +19,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import com.example.noties.R
 import com.example.noties.feature.presentation.notes.menu.MenuAction
-import com.example.noties.ui.theme.Purple500
 
 @Composable
 fun TopBar(
@@ -36,7 +35,7 @@ fun TopBar(
 
     TopAppBar(
         modifier = modifier.fillMaxWidth(),
-        backgroundColor = Purple500,
+        backgroundColor = MaterialTheme.colors.onBackground,
         title = {
             if (onSearchClick) {
                 SearchAppBar(
@@ -49,7 +48,7 @@ fun TopBar(
                     },
                     onSearchClicked = { setings -> })
             } else {
-                Text(text = stringResource(id = R.string.all_noties))
+                Text(text = stringResource(id = R.string.all_noties), color = MaterialTheme.colors.surface)
             }
         },
         navigationIcon = {

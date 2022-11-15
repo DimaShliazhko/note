@@ -6,7 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.*
@@ -15,8 +15,6 @@ import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.rememberImagePainter
-import com.example.noties.feature.presentation.add_edit_notes.EditNoteEvent
-import com.example.noties.ui.theme.Purple500
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -49,7 +47,7 @@ fun CameraScreen(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Purple500)
+                .background(MaterialTheme.colors.onBackground)
         ) {
             if (shouldShowCamera) {
                 CameraView(

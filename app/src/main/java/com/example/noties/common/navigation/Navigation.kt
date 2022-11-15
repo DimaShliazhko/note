@@ -25,132 +25,133 @@ import com.google.accompanist.navigation.animation.composable
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun Navigation(
-    navController: NavHostController
+    navController: NavHostController,
+    darkMode: (isDark: Boolean) -> Unit) {
+
+
+AnimatedNavHost(
+navController = navController,
+startDestination = Screen.NotesScreen.route,
 ) {
-
-    AnimatedNavHost(
-        navController = navController,
-        startDestination = Screen.NotesScreen.route,
+    composable(
+        route = Screen.NotesScreen.route,
+        exitTransition = null,
+        enterTransition = null
     ) {
-        composable(
-            route = Screen.NotesScreen.route,
-            exitTransition = null,
-            enterTransition = null
-        ) {
-            NotesScreen(navController = navController)
+        NotesScreen(navController = navController, darkMode = {darkMode(it)})
+    }
+
+    composable(
+        route = Screen.EditScreen.route,
+        exitTransition = {
+            slideOutOfContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
+        },
+        enterTransition = {
+            slideIntoContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
+        },
+        arguments = listOf(navArgument(MY_ARG) { type = NavType.LongType }),
+        deepLinks = listOf(navDeepLink { uriPattern = "$MY_URI/$MY_ARG={$MY_ARG}" })
+    ) {
+
+        it.arguments?.getLong(MY_ARG)?.let { id ->
+            EditNoteScreen(navController = navController, id)
         }
 
-        composable(
-            route = Screen.EditScreen.route,
-            exitTransition = {
-                slideOutOfContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
-            },
-            enterTransition = {
-                slideIntoContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
-            },
-            arguments = listOf(navArgument(MY_ARG) { type = NavType.LongType }),
-            deepLinks = listOf(navDeepLink { uriPattern = "$MY_URI/$MY_ARG={$MY_ARG}" })
-        ) {
-
-            it.arguments?.getLong(MY_ARG)?.let { id ->
-                EditNoteScreen(navController = navController, id)
-            }
-
-            navController.previousBackStackEntry?.savedStateHandle?.get<Long>(NOTE_ID)?.let {
-                EditNoteScreen(navController = navController, it)
-            }
-        }
-
-        composable(
-            Screen.AddNotesScreen.route,
-            exitTransition = {
-                slideOutOfContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
-            },
-            enterTransition = {
-                slideIntoContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
-            }
-        ) {
-            EditNoteScreen(navController = navController)
-        }
-
-        composable(
-            route = Screen.CameraScreen.route,
-            exitTransition = {
-                slideOutOfContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
-            },
-            enterTransition = {
-                slideIntoContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
-            }
-        ) {
-            navController.previousBackStackEntry?.savedStateHandle?.get<Long>(ID_BACK_STACK)?.let {
-                CameraScreen(noteId = it, navController = navController)
-            }
-
-        }
-
-        composable(
-            route = Screen.VideoScreen.route,
-            exitTransition = {
-                slideOutOfContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
-            },
-            enterTransition = {
-                slideIntoContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
-            }
-        ) {
-            VideoScreen(navController = navController)
-        }
-
-        composable(
-            route = Screen.GoogleScreen.route,
-            exitTransition = {
-                slideOutOfContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
-            },
-            enterTransition = {
-                slideIntoContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
-            }
-        ) {
-            GoogleScreen(navController = navController)
-        }
-
-        composable(
-            route = Screen.DeepLinkScreen.route,
-            exitTransition = {
-                slideOutOfContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
-            },
-            enterTransition = {
-                slideIntoContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
-            }
-        ) {
-            DeepLinkScreen(navController = navController)
-        }
-
-        composable(
-            route = Screen.DeepLinkDetailScreen.route,
-            exitTransition = {
-                slideOutOfContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
-            },
-            enterTransition = {
-                slideIntoContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
-            },
-            deepLinks = listOf(
-                navDeepLink {
-                    uriPattern = "https://noties.com/{id}"
-                    action = Intent.ACTION_VIEW
-                }
-            ),
-            arguments = listOf(
-                navArgument("id") {
-                    type = NavType.IntType
-                    defaultValue = -1
-                }
-            )
-        ) { entry ->
-            DeepLinkDetailScreen(
-                id = entry.arguments?.getInt("id") ?: 1,
-                navController = navController
-            )
+        navController.previousBackStackEntry?.savedStateHandle?.get<Long>(NOTE_ID)?.let {
+            EditNoteScreen(navController = navController, it)
         }
     }
+
+    composable(
+        Screen.AddNotesScreen.route,
+        exitTransition = {
+            slideOutOfContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
+        },
+        enterTransition = {
+            slideIntoContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
+        }
+    ) {
+        EditNoteScreen(navController = navController)
+    }
+
+    composable(
+        route = Screen.CameraScreen.route,
+        exitTransition = {
+            slideOutOfContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
+        },
+        enterTransition = {
+            slideIntoContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
+        }
+    ) {
+        navController.previousBackStackEntry?.savedStateHandle?.get<Long>(ID_BACK_STACK)?.let {
+            CameraScreen(noteId = it, navController = navController)
+        }
+
+    }
+
+    composable(
+        route = Screen.VideoScreen.route,
+        exitTransition = {
+            slideOutOfContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
+        },
+        enterTransition = {
+            slideIntoContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
+        }
+    ) {
+        VideoScreen(navController = navController)
+    }
+
+    composable(
+        route = Screen.GoogleScreen.route,
+        exitTransition = {
+            slideOutOfContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
+        },
+        enterTransition = {
+            slideIntoContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
+        }
+    ) {
+        GoogleScreen(navController = navController)
+    }
+
+    composable(
+        route = Screen.DeepLinkScreen.route,
+        exitTransition = {
+            slideOutOfContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
+        },
+        enterTransition = {
+            slideIntoContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
+        }
+    ) {
+        DeepLinkScreen(navController = navController)
+    }
+
+    composable(
+        route = Screen.DeepLinkDetailScreen.route,
+        exitTransition = {
+            slideOutOfContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
+        },
+        enterTransition = {
+            slideIntoContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
+        },
+        deepLinks = listOf(
+            navDeepLink {
+                uriPattern = "https://noties.com/{id}"
+                action = Intent.ACTION_VIEW
+            }
+        ),
+        arguments = listOf(
+            navArgument("id") {
+                type = NavType.IntType
+                defaultValue = -1
+            }
+        )
+    ) { entry ->
+        DeepLinkDetailScreen(
+            id = entry.arguments?.getInt("id") ?: 1,
+            navController = navController
+        )
+    }
+}
 
 }
 

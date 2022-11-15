@@ -53,22 +53,21 @@ class MainActivity : ComponentActivity() {
             permissionLauncher.launch(temp.toTypedArray())
         }
 
-
-
         setContent {
-            NotiesTheme {
+            var isDark by remember { mutableStateOf(false) }
+            NotiesTheme(darkTheme = isDark) {
                 val navController = rememberAnimatedNavController()
+
                 var showErrorDialog by remember { mutableStateOf(false) }
                 GlobalExceptionHandler.getThrowableFromIntent(intent)?.let {
                     if (!showErrorDialog) {
                         ErrorDialog(it, onDismiss = { showErrorDialog = it })
                     }
-
                 }
                 Surface(
                     modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background
                 ) {
-                    Navigation(navController)
+                    Navigation(navController, darkMode = { isDark = it })
                 }
             }
         }

@@ -1,9 +1,7 @@
 package com.example.noties.feature.presentation.notes
 
 import android.annotation.SuppressLint
-import android.widget.Toast
 import androidx.compose.animation.*
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -19,7 +17,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -27,8 +24,6 @@ import com.example.noties.common.navigation.Screen
 import com.example.noties.common.utils.NOTE_ID
 import com.example.noties.feature.domain.model.Note
 import com.example.noties.feature.presentation.notes.drawer.DrawerMenu
-import com.example.noties.ui.theme.Purple500
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -36,7 +31,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun NotesScreen(
     navController: NavController,
-    viewModel: NotesViewModel = hiltViewModel()
+    viewModel: NotesViewModel = hiltViewModel(),
+    darkMode: (isDark: Boolean) -> Unit
 ) {
     val state = viewModel.state.value
     val action = viewModel.action
@@ -58,7 +54,7 @@ fun NotesScreen(
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = Purple500),
+            .background(color = MaterialTheme.colors.onBackground),
         topBar = {
             TopBar(onTextChange = {
                 viewModel.setEvent(NotesEvent.Search(it))
@@ -78,7 +74,8 @@ fun NotesScreen(
                 throwErrorClick = { throw Error("something wrong happened") },
                 openVideoScreenClick = { navController.navigate((Screen.VideoScreen.route)) },
                 openGoogleScreenClick = { navController.navigate((Screen.GoogleScreen.route)) },
-                openDeepLinkScreenClick = {navController.navigate((Screen.DeepLinkScreen.route)) }
+                openDeepLinkScreenClick = { navController.navigate((Screen.DeepLinkScreen.route)) },
+                darkMode = { darkMode(it) }
             )
         },
         floatingActionButton = {
@@ -104,7 +101,7 @@ fun NotesScreen(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(color = Purple500)
+                    .background(color = MaterialTheme.colors.onBackground)
             ) {
                 AnimatedVisibility(
                     visible = isSortOpen,

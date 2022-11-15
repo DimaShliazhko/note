@@ -16,7 +16,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.example.noties.R
-import com.example.noties.ui.theme.Purple200
 
 @Composable
 fun PhotoCameraPicker(
@@ -57,7 +56,7 @@ fun PhotoCameraPicker(
                     Modifier
                         .fillMaxWidth()
                         .padding(top = 10.dp)
-                        .background(Purple200),
+                        .background(MaterialTheme.colors.onBackground),
                     horizontalArrangement = Arrangement.SpaceAround
                 ) {
 

@@ -8,3 +8,6 @@ const val ROUTE = "note_route"
 
 const val MY_URI = "https://note.com"
 const val MY_ARG = "noteid"
+
+const val ANIMATION_DURATION = 500
+const val MIN_DRAG_AMOUNT = 6

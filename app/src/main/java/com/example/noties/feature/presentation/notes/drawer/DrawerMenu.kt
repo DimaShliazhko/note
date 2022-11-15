@@ -2,10 +2,7 @@ package com.example.noties.feature.presentation.notes.drawer
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Icon
-import androidx.compose.material.Switch
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
@@ -40,6 +37,7 @@ fun DrawerMenu(
                 darkMode(checked)
             }
         )
+        Divider()
         Spacer(modifier = Modifier.height(16.dp))
         TextButton(
             onClick = { allDeleteClick() }) {

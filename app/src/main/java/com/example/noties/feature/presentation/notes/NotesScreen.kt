@@ -77,7 +77,8 @@ fun NotesScreen(
                 openVideoScreenClick = { navController.navigate((Screen.VideoScreen.route)) },
                 openGoogleScreenClick = { navController.navigate((Screen.GoogleScreen.route)) },
                 openDeepLinkScreenClick = { navController.navigate((Screen.DeepLinkScreen.route)) },
-                darkMode = { darkMode(it) }
+                darkMode = { darkMode(it) },
+                openDataStoreScreenClick = { navController.navigate((Screen.DataStoreScreen.route)) }
             )
         },
         floatingActionButton = {

@@ -11,3 +11,5 @@ const val MY_ARG = "noteid"
 
 const val ANIMATION_DURATION = 500
 const val MIN_DRAG_AMOUNT = 6
+
+const val PERSON_PREFERENCES = "person_preferences"

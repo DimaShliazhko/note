@@ -10,6 +10,7 @@ sealed class Screen(val route: String) {
     object GoogleScreen : Screen("google_screen")
     object DeepLinkScreen : Screen("deep_link_screen")
     object DeepLinkDetailScreen : Screen("deep_link_detail_screen")
+    object DataStoreScreen : Screen("datastore_screen")
     object EditScreen : Screen("edit_screen/{$MY_ARG}") {
         fun passNoteId(noteId: Long) = "edit_screen/$noteId"
     }

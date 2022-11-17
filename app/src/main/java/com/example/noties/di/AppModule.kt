@@ -3,25 +3,36 @@ package com.example.noties.di
 import android.app.Application
 import android.content.Context
 import androidx.datastore.core.DataStore
+import androidx.datastore.core.DataStoreFactory
+import androidx.datastore.dataStoreFile
+import androidx.datastore.preferences.SharedPreferencesMigration
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.room.Room
+import com.example.noties.Person
 import com.example.noties.common.utils.AlarmUtils
+import com.example.noties.common.utils.PERSON_PREFERENCES
 import com.example.noties.feature.data.data_source.NoteDataBase
 import com.example.noties.feature.data.repository.NoteRepositoryImpl
+import com.example.noties.feature.data.repository.ProtoRepositoryImpl
+import com.example.noties.feature.domain.MySerializer
 import com.example.noties.feature.domain.model.metadatas.MetaDataReader
 import com.example.noties.feature.domain.model.metadatas.MetaDataReaderImpl
 import com.example.noties.feature.domain.repository.NoteRepository
 import com.example.noties.feature.domain.repository.PrefDataRepository
+import com.example.noties.feature.domain.repository.ProtoRepository
 import com.example.noties.feature.domain.use_case.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import javax.inject.Singleton
 
 @Module
@@ -42,6 +53,25 @@ object AppModule {
     @Singleton
     fun provideNoteRepositoryImpl(dataBase: NoteDataBase): NoteRepository {
         return NoteRepositoryImpl(dataBase.noteDao())
+    }
+
+
+    @Provides
+    @Singleton
+    fun provideProtoDataStore(@ApplicationContext appContext: Context): DataStore<Person> {
+        return DataStoreFactory.create(
+            serializer = MySerializer(),
+            corruptionHandler = null,
+            //  migrations = listOf(SharedPreferencesMigration(appContext, PERSON_PREFERENCES)),
+            scope = CoroutineScope(Dispatchers.IO + SupervisorJob()),
+            produceFile = { appContext.dataStoreFile(PERSON_PREFERENCES) }
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideProtoRepositoryImpl(protoDataStore: DataStore<Person>): ProtoRepository {
+        return ProtoRepositoryImpl(protoDataStore)
     }
 
     @Provides

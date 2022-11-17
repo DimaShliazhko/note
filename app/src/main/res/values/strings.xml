@@ -22,4 +22,7 @@
     <string name="open_deep_link">open Deep Link</string>
     <string name="deep_link_detail">detail screen</string>
     <string name="deep_link_telegram">Move Telegram</string>
+    <string name="open_datastore">Open DataStore</string>
+    <string name="save">save</string>
+    <string name="input_text">Input text</string>
 </resources>

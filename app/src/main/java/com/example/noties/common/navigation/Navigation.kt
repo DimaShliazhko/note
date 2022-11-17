@@ -15,6 +15,7 @@ import com.example.noties.common.utils.NOTE_ID
 import com.example.noties.feature.presentation.add_edit_notes.EditNoteScreen
 import com.example.noties.feature.presentation.notes.NotesScreen
 import com.example.noties.feature.presentation.notes.camera.CameraScreen
+import com.example.noties.feature.presentation.notes.datastore.DataStoreScreen
 import com.example.noties.feature.presentation.notes.deep_link.DeepLinkDetailScreen
 import com.example.noties.feature.presentation.notes.deep_link.DeepLinkScreen
 import com.example.noties.feature.presentation.notes.login_google.GoogleScreen
@@ -123,6 +124,18 @@ startDestination = Screen.NotesScreen.route,
         }
     ) {
         DeepLinkScreen(navController = navController)
+    }
+
+    composable(
+        route = Screen.DataStoreScreen.route,
+        exitTransition = {
+            slideOutOfContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
+        },
+        enterTransition = {
+            slideIntoContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
+        }
+    ) {
+        DataStoreScreen(navController = navController)
     }
 
     composable(

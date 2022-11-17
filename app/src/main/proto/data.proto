@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+option java_package = "com.example.noties";
+option java_multiple_files = true;
+
+
+message Person{
+  string firstname = 1;
+  string lastname = 2;
+  int32 age = 3;
+}

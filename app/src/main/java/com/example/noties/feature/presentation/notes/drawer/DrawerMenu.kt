@@ -20,6 +20,7 @@ fun DrawerMenu(
     openVideoScreenClick: () -> Unit,
     openGoogleScreenClick: () -> Unit,
     openDeepLinkScreenClick: () -> Unit,
+    openDataStoreScreenClick: () -> Unit,
     darkMode: (isDarck: Boolean) -> Unit
 ) {
     var checked by remember { mutableStateOf(false) }
@@ -84,6 +85,15 @@ fun DrawerMenu(
             )
         }
 
-
+        TextButton(
+            onClick = { openDataStoreScreenClick() }) {
+            Icon(
+                imageVector = Icons.Default.Save,
+                contentDescription = stringResource(id = R.string.open_datastore)
+            )
+            Text(
+                text = stringResource(id = R.string.open_datastore),
+            )
+        }
     }
 }

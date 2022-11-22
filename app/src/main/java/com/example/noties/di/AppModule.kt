@@ -25,6 +25,7 @@ import com.example.noties.feature.domain.repository.NoteRepository
 import com.example.noties.feature.domain.repository.PrefDataRepository
 import com.example.noties.feature.domain.repository.ProtoRepository
 import com.example.noties.feature.domain.use_case.*
+
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -141,6 +142,12 @@ object AppModule {
     fun provideMetaDataReader(@ApplicationContext app: Context): MetaDataReader {
         return MetaDataReaderImpl(app)
     }
+
+  /*  @Provides
+    @Singleton
+    fun provideShortcutsHandler(noteUseCase:NoteUseCase,@ApplicationContext context: Context): ShortcutsHandler {
+        return ShortcutsHandler(   noteUseCase = noteUseCase,context =context)
+    }*/
 
 }
 

@@ -1,7 +1,9 @@
 package com.example.noties
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -19,16 +21,24 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.pm.ShortcutInfoCompat
+import androidx.core.content.pm.ShortcutManagerCompat
+import androidx.core.graphics.drawable.IconCompat
+import androidx.lifecycle.lifecycleScope
 import com.example.noties.common.navigation.Navigation
 import com.example.noties.common.utils.exception.GlobalExceptionHandler
 import com.example.noties.common.utils.exception.checkPermissions
 import com.example.noties.feature.presentation.notes.dialog.ErrorDialog
+import com.example.noties.feature.shortcut.ShortcutsHandler
 import com.example.noties.ui.theme.NotiesTheme
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
 
     private val permissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
@@ -45,9 +55,16 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+   @Inject  lateinit var shortcutsHandler: ShortcutsHandler
+
     @OptIn(ExperimentalAnimationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        lifecycleScope.launch{
+            shortcutsHandler.observeNotes(this@MainActivity)
+        }
+
         val temp = this.checkPermissions()
         if (temp.isNotEmpty()) {
             permissionLauncher.launch(temp.toTypedArray())

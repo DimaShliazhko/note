@@ -29,7 +29,6 @@ class ShortcutsHandler @Inject constructor(
 ) {
     val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
-
     suspend fun observeNotes(context: Context) {
         ShortcutManagerCompat.removeAllDynamicShortcuts(context)
 

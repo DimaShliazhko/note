@@ -24,7 +24,9 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.example.noties.common.navigation.Navigation
 import com.example.noties.common.utils.exception.GlobalExceptionHandler
 import com.example.noties.common.utils.exception.checkPermissions
@@ -55,14 +57,17 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-   @Inject  lateinit var shortcutsHandler: ShortcutsHandler
+    @Inject
+    lateinit var shortcutsHandler: ShortcutsHandler
 
     @OptIn(ExperimentalAnimationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        lifecycleScope.launch{
-            shortcutsHandler.observeNotes(this@MainActivity)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                shortcutsHandler.observeNotes(this@MainActivity)
+            }
         }
 
         val temp = this.checkPermissions()

@@ -25,7 +25,6 @@ import javax.inject.Inject
 
 class ShortcutsHandler @Inject constructor(
     private val noteUseCase: NoteUseCase,
-    private val context: Context,
 ) {
     val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 

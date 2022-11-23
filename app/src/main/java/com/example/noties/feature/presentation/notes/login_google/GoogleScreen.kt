@@ -4,6 +4,10 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.graphics.ExperimentalAnimationGraphicsApi
+import androidx.compose.animation.graphics.res.animatedVectorResource
+import androidx.compose.animation.graphics.res.rememberAnimatedVectorPainter
+import androidx.compose.animation.graphics.vector.AnimatedImageVector
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -11,6 +15,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -19,25 +24,38 @@ import androidx.navigation.NavHostController
 import com.example.noties.R
 import com.example.noties.ui.theme.Shapes
 
+@OptIn(ExperimentalAnimationGraphicsApi::class)
 @Composable
 fun GoogleScreen(
     navController: NavHostController,
 ) {
+
 
     Box(modifier = Modifier.fillMaxSize()) {
         GoogleButton()
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalAnimationGraphicsApi::class)
 @Composable
 fun GoogleButton(
     text: String = stringResource(id = R.string.sign_google),
     loadingText: String = stringResource(id = R.string.create_account)
 ) {
+
+    var state by remember {
+        mutableStateOf(false
+        )
+    }
+
+    val painter = rememberAnimatedVectorPainter(
+        animatedImageVector = AnimatedImageVector.animatedVectorResource(id = R.drawable.swirl_fp_to_error_state_animation),
+        atEnd = state)
     var onClick by remember { mutableStateOf(false) }
     Surface(
-        onClick = { onClick = !onClick },
+        onClick = {
+            state = !state
+            onClick = !onClick },
         shape = Shapes.medium,
         border = BorderStroke(width = 1.dp, color = Color.Red),
         color = MaterialTheme.colors.surface
@@ -53,7 +71,7 @@ fun GoogleButton(
 
             ) {
             Icon(
-                painter = painterResource(id = R.drawable.ic_google),
+                painter = painter,
                 contentDescription = "",
                 tint = Color.Unspecified
             )

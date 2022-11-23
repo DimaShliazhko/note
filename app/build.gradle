@@ -180,6 +180,10 @@ dependencies {
     implementation  "androidx.datastore:datastore-core:1.1.0-alpha01"
     implementation  "com.google.protobuf:protobuf-javalite:3.10.0"
 
+
+    //animated
+    implementation "androidx.compose.animation:animation-graphics:1.3.1"
+
 }
 
 protobuf {

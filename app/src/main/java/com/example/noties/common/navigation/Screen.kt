@@ -4,6 +4,8 @@ import com.example.noties.common.utils.MY_ARG
 
 sealed class Screen(val route: String) {
     object NotesScreen : Screen("notes_screen")
+    object MainScreen : Screen("main_screen")
+    object SettingsScreen : Screen("settings_screen")
     object AddNotesScreen : Screen("add_notes_screen")
     object CameraScreen : Screen("camera_screen")
     object VideoScreen : Screen("video_screen")

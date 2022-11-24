@@ -57,6 +57,7 @@ fun NotesScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(color = MaterialTheme.colors.onBackground),
+
         topBar = {
             TopBar(onTextChange = {
                 viewModel.setEvent(NotesEvent.Search(it))
@@ -94,6 +95,7 @@ fun NotesScreen(
                 }
             }
         },
+
         scaffoldState = scaffoldState
     ) {
 

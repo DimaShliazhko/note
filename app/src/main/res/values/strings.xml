@@ -25,4 +25,6 @@
     <string name="open_datastore">Open DataStore</string>
     <string name="save">save</string>
     <string name="input_text">Input text</string>
+    <string name="home">home</string>
+    <string name="settings">settings</string>
 </resources>

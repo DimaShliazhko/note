@@ -9,6 +9,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
+import com.example.noties.common.permission.PermissionScreen
 import com.example.noties.common.utils.MY_ARG
 import com.example.noties.common.utils.MY_URI
 import com.example.noties.common.utils.NOTE_ID
@@ -20,6 +21,7 @@ import com.example.noties.feature.presentation.notes.datastore.DataStoreScreen
 import com.example.noties.feature.presentation.notes.deep_link.DeepLinkDetailScreen
 import com.example.noties.feature.presentation.notes.deep_link.DeepLinkScreen
 import com.example.noties.feature.presentation.notes.login_google.GoogleScreen
+import com.example.noties.feature.presentation.notes.qr.QrScreen
 import com.example.noties.feature.presentation.notes.settings.SettingsScreen
 import com.example.noties.feature.presentation.notes.video.VideoScreen
 import com.google.accompanist.navigation.animation.AnimatedNavHost
@@ -119,6 +121,30 @@ fun Navigation(
             }
         ) {
             VideoScreen(navController = navController)
+        }
+
+        composable(
+            route = Screen.PermissionScreen.route,
+            exitTransition = {
+                slideOutOfContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
+            },
+            enterTransition = {
+                slideIntoContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
+            }
+        ) {
+            PermissionScreen(navController = navController)
+        }
+
+        composable(
+            route = Screen.QrScreen.route,
+            exitTransition = {
+                slideOutOfContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
+            },
+            enterTransition = {
+                slideIntoContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(700))
+            }
+        ) {
+            QrScreen(navController = navController)
         }
 
         composable(

@@ -27,4 +27,6 @@
     <string name="input_text">Input text</string>
     <string name="home">home</string>
     <string name="settings">settings</string>
+    <string name="open_qrScreen">open qr screen</string>
+    <string name="open_permission">open permission screen</string>
 </resources>

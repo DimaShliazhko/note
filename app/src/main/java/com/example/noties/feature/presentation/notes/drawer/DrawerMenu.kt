@@ -21,6 +21,8 @@ fun DrawerMenu(
     openGoogleScreenClick: () -> Unit,
     openDeepLinkScreenClick: () -> Unit,
     openDataStoreScreenClick: () -> Unit,
+    openQrScreenClick: () -> Unit,
+    openPermissionScreenClick: () -> Unit,
     darkMode: (isDarck: Boolean) -> Unit
 ) {
     var checked by remember { mutableStateOf(false) }
@@ -93,6 +95,28 @@ fun DrawerMenu(
             )
             Text(
                 text = stringResource(id = R.string.open_datastore),
+            )
+        }
+
+        TextButton(
+            onClick = { openQrScreenClick() }) {
+            Icon(
+                imageVector = Icons.Default.QrCode,
+                contentDescription = stringResource(id = R.string.open_qrScreen)
+            )
+            Text(
+                text = stringResource(id = R.string.open_qrScreen),
+            )
+        }
+
+        TextButton(
+            onClick = { openPermissionScreenClick() }) {
+            Icon(
+                imageVector = Icons.Default.RequestPage,
+                contentDescription = stringResource(id = R.string.open_permission)
+            )
+            Text(
+                text = stringResource(id = R.string.open_permission),
             )
         }
     }

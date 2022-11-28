@@ -9,6 +9,11 @@ import kotlinx.coroutines.launch
 suspend fun main() {
     println("Start Flow")
 
+    val user = User("F", "l", 12)
+
+    val name = user.getName()
+    println("Start Flow $name")
+
 
 /*    getFirstFlow().collect { flow ->
         println("Collecting $flow")
@@ -48,4 +53,23 @@ fun getSecondFlow() = flow {
         emit(it)
         delay(50)
     }
+}
+
+data class User(
+    val firstName: String,
+    val lastName: String,
+    val age: Int,
+) {
+
+
+    fun getName() : String{
+        val name = firstName.returnNAme()
+        return name
+        println("Name  $name")
+    }
+
+    fun String.returnNAme(): String {
+        return firstName
+    }
+
 }

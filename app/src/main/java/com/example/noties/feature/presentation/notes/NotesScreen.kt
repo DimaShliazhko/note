@@ -79,7 +79,10 @@ fun NotesScreen(
                 openGoogleScreenClick = { navController.navigate((Screen.GoogleScreen.route)) },
                 openDeepLinkScreenClick = { navController.navigate((Screen.DeepLinkScreen.route)) },
                 darkMode = { darkMode(it) },
-                openDataStoreScreenClick = { navController.navigate((Screen.DataStoreScreen.route)) }
+                openDataStoreScreenClick = { navController.navigate((Screen.DataStoreScreen.route)) },
+                openQrScreenClick = { navController.navigate((Screen.QrScreen.route)) },
+                openPermissionScreenClick = { navController.navigate((Screen.PermissionScreen.route)) }
+
             )
         },
         floatingActionButton = {

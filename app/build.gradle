@@ -162,6 +162,7 @@ dependencies {
     implementation "com.google.accompanist:accompanist-placeholder:$accompanist"
     implementation "com.google.accompanist:accompanist-navigation-animation:$accompanist"
     implementation "com.google.accompanist:accompanist-swiperefresh:$accompanist"
+    implementation "com.google.accompanist:accompanist-permissions:$accompanist"
 
     //datastore
     implementation "androidx.datastore:datastore-preferences:1.0.0"
@@ -196,6 +197,9 @@ dependencies {
 
     //animated
     implementation "androidx.compose.animation:animation-graphics:1.3.1"
+
+    //qr
+     implementation "com.google.zxing:core:3.3.3"
 
 }
 

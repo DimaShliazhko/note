@@ -27,8 +27,7 @@ fun MainContent(
         },
         bottomBar = {
             BottomNavigationBar(navController = navController, selectorTab = selector, onItemClickListener = {
-                selector =
-                    it
+                selector =                    it
             })
         },
 
